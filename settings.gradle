@@ -1,0 +1,4 @@
+// This file is used to configure the settings for the Gradle build system.
+// It specifies the name of the root project and can include other configuration settings.
+
+rootProject.name = 'calculator_gui_app'

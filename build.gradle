@@ -1,0 +1,63 @@
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // No additional dependencies unless you need extra libraries
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)  // Preferred Java version
+    }
+}
+
+application {
+    mainClass = 'app.CalculatorApp'  // Make sure this matches your main class
+}
+
+javafx {
+    version = "21"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+task compileSass {
+    doLast {
+        def os = System.properties['os.name'].toLowerCase()
+        def sassCmd = os.contains('windows') ? 'sass.cmd' : 'sass'
+
+        fileTree('src/main/resources/styles').matching {
+            include '**/*.scss'
+        }.each { File scssFile ->
+            def cssFileName = scssFile.name.replaceAll(/\.scss$/, '.css')
+            def cssFile = new File(scssFile.parentFile, cssFileName)
+            println "Compiling ${scssFile} → ${cssFile}"
+            exec {
+                commandLine sassCmd, scssFile.absolutePath, cssFile.absolutePath
+            }
+        }
+    }
+}
+
+compileJava.dependsOn compileSass
+
+clean.doFirst {
+    delete fileTree('src/main/resources/styles').matching {
+        include '**/*.css'
+    }
+}
+
+// Disable the default distribution tasks to avoid creating unnecessary files
+tasks.named('distZip').configure {
+    enabled = false
+}
+
+tasks.named('distTar').configure {
+    enabled = false
+}
+
