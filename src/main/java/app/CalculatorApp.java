@@ -22,7 +22,7 @@ public class CalculatorApp extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (Exception e) {
-            System.err.println("Error loading FXML file: " + e.getMessage());
+            System.err.println("Error loading files: " + e.getMessage());
         }
     }
 

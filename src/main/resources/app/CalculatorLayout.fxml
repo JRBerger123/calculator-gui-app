@@ -11,52 +11,53 @@
 
     <VBox spacing="10.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0"
-          styleClass="calculator-root">
+          styleClass="calculator-root" maxWidth="Infinity" maxHeight="Infinity">
 
         <!-- Calculator Display -->
-        <Label fx:id="input" text="" styleClass="calculator-display"/>
+        <Label fx:id="input" text="test" styleClass="calculator-display" maxWidth="Infinity" />
 
         <!-- Buttons Grid -->
-        <VBox spacing="5" styleClass="button-container">
+        <VBox spacing="5" styleClass="button-container" maxWidth="Infinity" maxHeight="Infinity" VBox.vgrow="ALWAYS">
 
             <!-- Row 1 -->
             <HBox spacing="5">
-                <Button text="7" styleClass="calculator-button"/>
-                <Button text="8" styleClass="calculator-button"/>
-                <Button text="9" styleClass="calculator-button"/>
-                <Button text="÷" styleClass="calculator-operator"/>
+                <Button text="7" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="8" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="9" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="÷" styleClass="calculator-button, operator" HBox.hgrow="ALWAYS"/>
             </HBox>
 
             <!-- Row 2 -->
             <HBox spacing="5">
-                <Button text="4" styleClass="calculator-button"/>
-                <Button text="5" styleClass="calculator-button"/>
-                <Button text="6" styleClass="calculator-button"/>
-                <Button text="x" styleClass="calculator-operator"/>
+                <Button text="4" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="5" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="6" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="x" styleClass="calculator-button, operator" HBox.hgrow="ALWAYS"/>
             </HBox>
 
             <!-- Row 3 -->
             <HBox spacing="5">
-                <Button text="1" styleClass="calculator-button"/>
-                <Button text="2" styleClass="calculator-button"/>
-                <Button text="3" styleClass="calculator-button"/>
-                <Button text="-" styleClass="calculator-operator"/>
+                <Button text="1" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="2" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="3" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="-" styleClass="calculator-button, operator" HBox.hgrow="ALWAYS"/>
             </HBox>
 
             <!-- Row 4 -->
             <HBox spacing="5">
-                <Button text="0" styleClass="calculator-button"/>
-                <Button text="." styleClass="calculator-button"/>
-                <Button text="=" styleClass="calculator-equals"/>
-                <Button text="+" styleClass="calculator-operator"/>
+                <Button text="0" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="." styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="=" styleClass="calculator-button, equals" HBox.hgrow="ALWAYS"/>
+                <Button text="+" styleClass="calculator-button, operator" HBox.hgrow="ALWAYS"/>
             </HBox>
 
             <!-- Row 5: Extra Functions -->
             <HBox spacing="5">
-                <Button text="C" styleClass="calculator-function"/>
-                <Button text="CE" styleClass="calculator-function"/>
-                <Button text="⌫" styleClass="calculator-function"/>
-                <Button fx:id="percentButton" styleClass="calculator-function"/>
+                <Button text="C" styleClass="calculator-function" HBox.hgrow="ALWAYS"/>
+                <Button text="CE" styleClass="calculator-function" HBox.hgrow="ALWAYS"/>
+                <Button text="⌫" styleClass="calculator-function" HBox.hgrow="ALWAYS"/>
+                <!-- You cannot put percent symbol directly as text because it is a symbol for using a resource in xml -->
+                <Button fx:id="percentButton" styleClass="calculator-function" HBox.hgrow="ALWAYS"/>
             </HBox>
 
         </VBox>
