@@ -4,10 +4,11 @@
   -fx-text-fill: white;
   -fx-alignment: center-right;
   -fx-pref-height: 60px;
+  -fx-padding: 0px 10px;
 }
 
 .button-container {
-  -fx-background-color: #444;
+  -fx-background-color: #bdbdbd;
   -fx-padding: 10px;
   -fx-spacing: 10px;
   -fx-alignment: center;
@@ -20,6 +21,7 @@
   -fx-pref-width: 50px;
   -fx-pref-height: 50px;
   -fx-max-width: Infinity;
+  -fx-max-height: Infinity;
 }
 
 .digit {
