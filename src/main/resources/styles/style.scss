@@ -1,61 +1,129 @@
 .calculator-display {
-    -fx-font-size: 24px;
-    -fx-background-color: #333;
+    -fx-font-size: 32px;
+    -fx-background-color: rgba(0,0,0,0.5);
     -fx-text-fill: white;
     -fx-alignment: center-right;
     -fx-pref-height: 60px;
-    -fx-padding: 0px 10px;
+    -fx-padding: 10px;
+}
+
+.expression-display {
+    -fx-font-size: 18px;
+    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-text-fill: white;
+    -fx-alignment: center-right;
+    -fx-padding: 5px 10px;
+}
+
+.display-container {
+    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-padding: 10px;
+    -fx-spacing: 5px;
 }
 
 .button-container {
-    -fx-background-color: #bdbdbd;
+    -fx-background-color: rgba(0,0,0,0.5);
     -fx-padding: 10px;
-    -fx-spacing: 10px;
+    -fx-spacing: 5px;
     -fx-alignment: center;
-    -fx-hgap: 10px;
-    -fx-vgap: 10px;
 }
 
-.calculator-button {
+.calculator-button, .calculator-function {
     -fx-font-size: 18px;
     -fx-pref-width: 50px;
     -fx-pref-height: 50px;
     -fx-max-width: Infinity;
     -fx-max-height: Infinity;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 2, 0, 0, 1);
 }
 
 .digit {
-    -fx-background-color: #4caf50;
-    -fx-text-fill: white;
-    -fx-background-radius: 8px;
-
-    &:hover {
-        -fx-background-color: #449947;
-    }
-
-    &:pressed {
-        -fx-background-color: #388e3c;
-    }
+    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-text-fill: rgb(255,255,255);
+}
+.digit:hover {
+    -fx-background-color: rgba(0,0,0,0.2);
+}
+.digit:pressed {
+    -fx-background-color: rgba(0,0,0,0.5);
 }
 
 .operator {
-    -fx-background-color: #27c0c5;
-
-    &:hover {
-        -fx-background-color: #23a2a7;
-    }
-
-    &:pressed {
-        -fx-background-color: #1b7275;
-    }
+    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-text-fill: white;
 }
-.equals{
-    -fx-background-color: #1111111B;
+.operator:hover {
+    -fx-background-color: rgba(0,0,0,0.2);
 }
-.calculator-function {
+.operator:pressed {
+    -fx-background-color: rgba(0,0,0,0.5);
+}
+
+.function-button {
+    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-text-fill: white;
+}
+.function-button:hover {
+    -fx-background-color: rgba(0,0,0,0.2);
+}
+.function-button:pressed {
+    -fx-background-color: rgba(0,0,0,0.5);
+}
+
+.memory-button {
+    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+}
+.memory-button:hover {
+    -fx-background-color: rgba(0,0,0,0.2);
+}
+.memory-button:pressed {
+    -fx-background-color: rgba(0,0,0,0.5);
+}
+
+
+.equals {
+    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-text-fill: white;
+}
+.equals:hover {
+    -fx-background-color: rgba(0,0,0,0.2);
+}
+.equals:pressed {
+    -fx-background-color: rgba(0,0,0,0.5);
+}
+
+.side-panel {
+    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+
+.tab-buttons {
+    -fx-padding: 5px;
+    -fx-spacing: 5px;
+}
+
+.tab-button {
+    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 8px;
+    -fx-background-radius: 5px;
+}
+
+.panel-header {
     -fx-font-size: 18px;
-    -fx-pref-width: 50px;
-    -fx-pref-height: 50px;
-    -fx-max-width: Infinity;
-    -fx-max-height: Infinity;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 0;
+}
+
+.history-panel, .memory-panel {
+    -fx-spacing: 5px;
+}
+
+.calculator-root {
+    -fx-background-color: rgba(0,0,0,0.5);
 }
