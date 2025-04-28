@@ -46,4 +46,16 @@
   -fx-background-color: #1b7275;
 }
 
+.equals {
+  -fx-background-color: rgba(17, 17, 17, 0.1058823529);
+}
+
+.calculator-function {
+  -fx-font-size: 18px;
+  -fx-pref-width: 50px;
+  -fx-pref-height: 50px;
+  -fx-max-width: Infinity;
+  -fx-max-height: Infinity;
+}
+
 /*# sourceMappingURL=style.css.map */

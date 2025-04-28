@@ -19,12 +19,27 @@
         <!-- Buttons Grid -->
         <VBox spacing="5" styleClass="button-container" maxWidth="Infinity" maxHeight="Infinity" VBox.vgrow="ALWAYS" >
 
+            <!-- Row 5: Extra Functions -->
+            <HBox spacing="5" VBox.vgrow="ALWAYS">
+                <Button fx:id="percentButton" styleClass="calculator-function, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="CE" styleClass="calculator-function, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="C" styleClass="calculator-function, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="⌫" styleClass="calculator-function, digit" HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <HBox spacing="5" VBox.vgrow="ALWAYS">
+                <Button text="1/x" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="x²" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
+                <Button text="√" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS" />
+                <Button text="÷" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS" />
+            </HBox>
+
             <!-- Row 1 -->
             <HBox spacing="5" VBox.vgrow="ALWAYS">
                 <Button text="7" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
                 <Button text="8" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
                 <Button text="9" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS" />
-                <Button text="÷" styleClass="calculator-button, operator" HBox.hgrow="ALWAYS" />
+                <Button text="x" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS" />
             </HBox>
 
             <!-- Row 2 -->
@@ -32,7 +47,7 @@
                 <Button text="4" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS" />
                 <Button text="5" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"  />
                 <Button text="6" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"  />
-                <Button text="x" styleClass="calculator-button, operator" HBox.hgrow="ALWAYS" />
+                <Button text="-" styleClass="calculator-button, operator" HBox.hgrow="ALWAYS" />
             </HBox>
 
             <!-- Row 3 -->
@@ -40,25 +55,25 @@
                 <Button text="1" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS" />
                 <Button text="2" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
                 <Button text="3" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
-                <Button text="-" styleClass="calculator-button, operator" HBox.hgrow="ALWAYS"/>
+                <Button text="+" styleClass="calculator-button, operator" HBox.hgrow="ALWAYS"/>
             </HBox>
 
             <!-- Row 4 -->
             <HBox spacing="5" VBox.vgrow="ALWAYS">
+                <Button text="(-)" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
                 <Button text="0" styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
                 <Button text="." styleClass="calculator-button, digit" HBox.hgrow="ALWAYS"/>
                 <Button text="=" styleClass="calculator-button, equals" HBox.hgrow="ALWAYS"/>
-                <Button text="+" styleClass="calculator-button, operator" HBox.hgrow="ALWAYS"/>
             </HBox>
 
-            <!-- Row 5: Extra Functions -->
-            <HBox spacing="5" VBox.vgrow="ALWAYS">
-                <Button text="C" styleClass="calculator-function" HBox.hgrow="ALWAYS"/>
-                <Button text="CE" styleClass="calculator-function" HBox.hgrow="ALWAYS"/>
-                <Button text="⌫" styleClass="calculator-function" HBox.hgrow="ALWAYS"/>
-                <!-- You cannot put percent symbol directly as text because it is a symbol for using a resource in xml -->
-                <Button fx:id="percentButton" styleClass="calculator-function" HBox.hgrow="ALWAYS"/>
-            </HBox>
+        </VBox>
+    </VBox>
+    <VBox>
+        <HBox>
+            <Button text="History"/>
+            <Button text="Memory"/>
+        </HBox>
+        <VBox>
 
         </VBox>
     </VBox>
