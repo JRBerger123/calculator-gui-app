@@ -37,6 +37,7 @@ public class JavaFXController {
     @FXML
     private Button memoryButton;
 
+    // TODO: Implement variable or remove it
     @FXML
     private VBox historyMemoryPanel;
 
@@ -109,8 +110,6 @@ public class JavaFXController {
 
     @FXML
     private void showHistoryPanel() {
-        //historyPanel.setVisible(true);
-        //memoryPanel.setVisible(false);
         historyMemoryListView.setItems(historyList);
         historyButton.setStyle("-fx-background-color: #27c0c5");
         memoryButton.setStyle("-fx-background-color: #bdbdbd");
@@ -118,8 +117,6 @@ public class JavaFXController {
 
     @FXML
     private void showMemoryPanel() {
-        //historyPanel.setVisible(false);
-        //memoryPanel.setVisible(true);
         historyMemoryListView.setItems(memoryList);
         historyButton.setStyle("-fx-background-color: #bdbdbd");
         memoryButton.setStyle("-fx-background-color: #27c0c5");
@@ -278,6 +275,7 @@ public class JavaFXController {
         }
     }
 
+    // FIXME: The percent function does not append % sign
     private void percent() {
         if (!currentInput.isEmpty()) {
             double value = Double.parseDouble(currentInput);
@@ -363,6 +361,7 @@ public class JavaFXController {
         hasCalculated = false;
     }
 
+    // FIXME: memory saved should only display as double if it is a double
     private void memorySave() {
         if (!currentInput.isEmpty()) {
             memoryList.add(0, currentInput);
@@ -387,6 +386,7 @@ public class JavaFXController {
         }
     }
 
+    // FIXME: memory recall should update display with memory and clear the expression display
     private void memoryRecall() {
         if (!memoryList.isEmpty()) {
             currentInput = memoryList.get(0);
@@ -395,6 +395,7 @@ public class JavaFXController {
         }
     }
 
+    // TODO: Implement button to clear memory, also each memory listing should have a M+, M-, and MC button
     private void memoryClear() {
         memoryList.clear();
     }

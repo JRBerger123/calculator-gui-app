@@ -1,4 +1,18 @@
-.calculator-display {
+.calculator-root {
+  -fx-background-color: rgb(62, 62, 62);
+}
+.calculator-root .settings-container {
+  -fx-background-color: rgb(62, 62, 62);
+  -fx-text-fill: white;
+  -fx-padding: 10px;
+  -fx-spacing: 10px;
+  -fx-font-size: 14px;
+}
+.calculator-root .display-container {
+  -fx-padding: 10px;
+  -fx-spacing: 5px;
+}
+.calculator-root .display-container .calculator-display {
   -fx-font-size: 32px;
   -fx-background-color: rgba(0, 0, 0, 0.5);
   -fx-text-fill: white;
@@ -6,29 +20,19 @@
   -fx-pref-height: 60px;
   -fx-padding: 10px;
 }
-
-.expression-display {
+.calculator-root .display-container .expression-display {
   -fx-font-size: 18px;
   -fx-background-color: rgba(0, 0, 0, 0.5);
   -fx-text-fill: white;
   -fx-alignment: center-right;
   -fx-padding: 5px 10px;
 }
-
-.display-container {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
-  -fx-padding: 10px;
-  -fx-spacing: 5px;
-}
-
-.button-container {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
+.calculator-root .button-container {
   -fx-padding: 10px;
   -fx-spacing: 5px;
   -fx-alignment: center;
 }
-
-.calculator-button, .calculator-function {
+.calculator-root .calculator-button, .calculator-root .calculator-function {
   -fx-font-size: 18px;
   -fx-pref-width: 50px;
   -fx-pref-height: 50px;
@@ -37,51 +41,47 @@
   -fx-background-radius: 5px;
   -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 2, 0, 0, 1);
 }
-
-.primary-button {
+.calculator-root .primary-button {
   -fx-background-color: rgb(58, 60, 63);
   -fx-text-fill: white;
   -fx-font-size: 18px;
 }
-.primary-button:hover {
+.calculator-root .primary-button:hover {
   -fx-background-color: rgb(48, 51, 54);
 }
-.primary-button:pressed {
+.calculator-root .primary-button:pressed {
   -fx-background-color: rgb(41, 41, 41);
 }
-
-.secondary-button {
+.calculator-root .secondary-button {
   -fx-background-color: rgb(48, 51, 54);
   -fx-text-fill: white;
   -fx-font-size: 18px;
 }
-.secondary-button:hover {
+.calculator-root .secondary-button:hover {
   -fx-background-color: rgb(58, 60, 63);
 }
-.secondary-button:pressed {
+.calculator-root .secondary-button:pressed {
   -fx-background-color: rgb(41, 41, 41);
 }
-
-.memory-button {
+.calculator-root .memory-button {
   -fx-background-color: rgba(0, 0, 0, 0);
   -fx-text-fill: white;
   -fx-font-size: 16px;
 }
-.memory-button:hover {
+.calculator-root .memory-button:hover {
   -fx-background-color: rgb(48, 51, 54);
 }
-.memory-button:pressed {
+.calculator-root .memory-button:pressed {
   -fx-background-color: rgb(41, 41, 41);
 }
-
-.equals {
+.calculator-root .equals {
   -fx-background-color: rgb(225, 131, 217);
   -fx-text-fill: rgb(0, 0, 0);
 }
-.equals:hover {
+.calculator-root .equals:hover {
   -fx-background-color: rgb(205, 120, 199);
 }
-.equals:pressed {
+.calculator-root .equals:pressed {
   -fx-background-color: rgb(154, 90, 149);
 }
 
@@ -90,33 +90,20 @@
   -fx-padding: 10px;
   -fx-spacing: 10px;
 }
-
-.tab-buttons {
+.side-panel .tab-buttons {
   -fx-padding: 5px;
   -fx-spacing: 5px;
 }
-
-.tab-button {
+.side-panel .tab-buttons .tab-button {
   -fx-background-color: rgba(0, 0, 0, 0.5);
   -fx-text-fill: white;
   -fx-font-size: 16px;
   -fx-padding: 8px;
   -fx-background-radius: 5px;
 }
-
-.panel-header {
-  -fx-font-size: 18px;
-  -fx-font-weight: bold;
-  -fx-padding: 10px 0;
-}
-
-.historyMemory-panel {
+.side-panel .historyMemory-panel {
   -fx-background-color: rgba(0, 0, 0, 0.5);
   -fx-spacing: 5px;
-}
-
-.calculator-root {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
 }
 
 /*# sourceMappingURL=style.css.map */

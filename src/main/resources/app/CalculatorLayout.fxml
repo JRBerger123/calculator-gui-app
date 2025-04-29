@@ -18,6 +18,22 @@
            AnchorPane.rightAnchor="350.0"
            styleClass="calculator-root">
 
+        <HBox styleClass="settings-container" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+            <!-- Menu Button-->
+            <Button fx:id="menuButton" onAction="#handleLeftClick" styleClass="menu-button" maxWidth="Infinity">
+                <graphic>
+                    <javafx.scene.shape.SVGPath fill="white" scaleX="1" scaleY="1">
+                        <content>M0 0h24v4H0V0zm0 7h24v4H0V7zm0 7h24v4H0v-4z</content>
+                    </javafx.scene.shape.SVGPath>
+                </graphic>
+            </Button>
+
+
+            <!-- Calculator Type -->
+            <Label text="Standard" styleClass="calculator-type" maxWidth="Infinity"/>
+
+        </HBox>
+
         <!-- Calculator Display -->
         <VBox styleClass="display-container">
             <Label fx:id="expressionDisplay" styleClass="expression-display" maxWidth="Infinity" />
