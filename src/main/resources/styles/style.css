@@ -38,70 +38,51 @@
   -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 2, 0, 0, 1);
 }
 
-.digit {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
-  -fx-text-fill: rgb(255, 255, 255);
-}
-
-.digit:hover {
-  -fx-background-color: rgba(0, 0, 0, 0.2);
-}
-
-.digit:pressed {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
-}
-
-.operator {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
+.primary-button {
+  -fx-background-color: rgb(58, 60, 63);
   -fx-text-fill: white;
+  -fx-font-size: 18px;
+}
+.primary-button:hover {
+  -fx-background-color: rgb(48, 51, 54);
+}
+.primary-button:pressed {
+  -fx-background-color: rgb(41, 41, 41);
 }
 
-.operator:hover {
-  -fx-background-color: rgba(0, 0, 0, 0.2);
-}
-
-.operator:pressed {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
-}
-
-.function-button {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
+.secondary-button {
+  -fx-background-color: rgb(48, 51, 54);
   -fx-text-fill: white;
+  -fx-font-size: 18px;
 }
-
-.function-button:hover {
-  -fx-background-color: rgba(0, 0, 0, 0.2);
+.secondary-button:hover {
+  -fx-background-color: rgb(58, 60, 63);
 }
-
-.function-button:pressed {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
+.secondary-button:pressed {
+  -fx-background-color: rgb(41, 41, 41);
 }
 
 .memory-button {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
+  -fx-background-color: rgba(0, 0, 0, 0);
   -fx-text-fill: white;
   -fx-font-size: 16px;
 }
-
 .memory-button:hover {
-  -fx-background-color: rgba(0, 0, 0, 0.2);
+  -fx-background-color: rgb(48, 51, 54);
 }
-
 .memory-button:pressed {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
+  -fx-background-color: rgb(41, 41, 41);
 }
 
 .equals {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
-  -fx-text-fill: white;
+  -fx-background-color: rgb(225, 131, 217);
+  -fx-text-fill: rgb(0, 0, 0);
 }
-
 .equals:hover {
-  -fx-background-color: rgba(0, 0, 0, 0.2);
+  -fx-background-color: rgb(205, 120, 199);
 }
-
 .equals:pressed {
-  -fx-background-color: rgba(0, 0, 0, 0.5);
+  -fx-background-color: rgb(154, 90, 149);
 }
 
 .side-panel {
@@ -129,7 +110,8 @@
   -fx-padding: 10px 0;
 }
 
-.history-panel, .memory-panel {
+.historyMemory-panel {
+  -fx-background-color: rgba(0, 0, 0, 0.5);
   -fx-spacing: 5px;
 }
 

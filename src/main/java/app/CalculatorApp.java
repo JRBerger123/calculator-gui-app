@@ -21,7 +21,7 @@ public class CalculatorApp extends Application {
 
             primaryStage.setScene(scene);
             primaryStage.show();
-        } catch (Exception e) {
+        } catch (java.io.IOException | java.lang.NullPointerException e) {
             System.err.println("Error loading files: " + e.getMessage());
         }
     }

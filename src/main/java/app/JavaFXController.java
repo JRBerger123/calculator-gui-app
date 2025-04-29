@@ -1,14 +1,15 @@
 package app;
 
+import java.text.DecimalFormat;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import java.text.DecimalFormat;
 
 public class JavaFXController {
 
@@ -31,22 +32,16 @@ public class JavaFXController {
     private VBox calculatorRoot;
 
     @FXML
-    private ListView<String> historyListView;
-
-    @FXML
     private Button historyButton;
 
     @FXML
     private Button memoryButton;
 
     @FXML
-    private VBox historyPanel;
+    private VBox historyMemoryPanel;
 
     @FXML
-    private VBox memoryPanel;
-
-    @FXML
-    private ListView<String> memoryListView;
+    private ListView<String> historyMemoryListView;
 
     private String currentInput = "";
     private String operator = "";
@@ -54,13 +49,13 @@ public class JavaFXController {
     private boolean startNewInput = true;
     private boolean hasCalculated = false;
 
-    private ObservableList<String> historyList = FXCollections.observableArrayList();
-    private ObservableList<String> memoryList = FXCollections.observableArrayList();
+    private final ObservableList<String> historyList = FXCollections.observableArrayList();
+    private final ObservableList<String> memoryList = FXCollections.observableArrayList();
 
-    private DecimalFormat df = new DecimalFormat("#.##########");
-    private DecimalFormat scientificDF = new DecimalFormat("0.######E0");
+    private final DecimalFormat df = new DecimalFormat("#.##########");
+    private final DecimalFormat scientificDF = new DecimalFormat("0.######E0");
 
-    private static final double RESPONSIVE_THRESHOLD = 700.0;
+    private static final double RESPONSIVE_THRESHOLD = 555.0;
 
     @FXML
     public void initialize() {
@@ -69,8 +64,7 @@ public class JavaFXController {
         expressionDisplay.setText("");
 
         // Initialize history and memory components
-        historyListView.setItems(historyList);
-        memoryListView.setItems(memoryList);
+        historyMemoryListView.setItems(historyList);
 
         // Default to history panel
         showHistoryPanel();
@@ -107,7 +101,7 @@ public class JavaFXController {
     private void adjustCalculatorLayout(boolean sidePanelVisible) {
         // When side panel is hidden, calculator takes full width
         if (sidePanelVisible) {
-            AnchorPane.setRightAnchor(calculatorRoot, 350.0);
+            AnchorPane.setRightAnchor(calculatorRoot, 245.0);
         } else {
             AnchorPane.setRightAnchor(calculatorRoot, 0.0);
         }
@@ -115,16 +109,18 @@ public class JavaFXController {
 
     @FXML
     private void showHistoryPanel() {
-        historyPanel.setVisible(true);
-        memoryPanel.setVisible(false);
+        //historyPanel.setVisible(true);
+        //memoryPanel.setVisible(false);
+        historyMemoryListView.setItems(historyList);
         historyButton.setStyle("-fx-background-color: #27c0c5");
         memoryButton.setStyle("-fx-background-color: #bdbdbd");
     }
 
     @FXML
     private void showMemoryPanel() {
-        historyPanel.setVisible(false);
-        memoryPanel.setVisible(true);
+        //historyPanel.setVisible(false);
+        //memoryPanel.setVisible(true);
+        historyMemoryListView.setItems(memoryList);
         historyButton.setStyle("-fx-background-color: #bdbdbd");
         memoryButton.setStyle("-fx-background-color: #27c0c5");
     }
@@ -132,74 +128,32 @@ public class JavaFXController {
     // All other methods remain the same
 
     @FXML
-    private void handleButtonClick(javafx.event.ActionEvent event) {
+    @SuppressWarnings("unused")
+    private void handleLeftClick(javafx.event.ActionEvent event) {
         Button clickedButton = (Button) event.getSource();
         String buttonText = clickedButton.getText();
 
         switch (buttonText) {
-            case "C":
-                clear();
-                break;
-            case "CE":
-                clearEntry();
-                break;
-            case "⌫":
-                backspace();
-                break;
-            case "+":
-            case "-":
-            case "x":
-            case "÷":
-                setOperator(buttonText);
-                break;
-            case "=":
-                calculateResult();
-                break;
-            case "%":
-                percent();
-                break;
-            case "√":
-                sqrt();
-                break;
-            case "x²":
-                square();
-                break;
-            case "1/x":
-                reciprocal();
-                break;
-            case "(-)":
-                toggleSign();
-                break;
-            case "History":
-                showHistoryPanel();
-                break;
-            case "Memory":
-                showMemoryPanel();
-                break;
-            case "MS":
-                memorySave();
-                break;
-            case "M+":
-                memoryAdd();
-                break;
-            case "M-":
-                memorySubtract();
-                break;
-            case "MR":
-                memoryRecall();
-                break;
-            case "MC":
-                memoryClear();
-                break;
-            case "π":
-                appendPi();
-                break;
-            case "e":
-                appendE();
-                break;
-            default: // Digits and dot
-                appendText(buttonText);
-                break;
+            case "C" -> clear();
+            case "CE" -> clearEntry();
+            case "⌫" -> backspace();
+            case "+", "-", "x", "÷" -> setOperator(buttonText);
+            case "=" -> calculateResult();
+            case "%" -> percent();
+            case "√" -> sqrt();
+            case "x²" -> square();
+            case "1/x" -> reciprocal();
+            case "(-)" -> toggleSign();
+            case "History" -> showHistoryPanel();
+            case "Memory" -> showMemoryPanel();
+            case "MS" -> memorySave();
+            case "M+" -> memoryAdd();
+            case "M-" -> memorySubtract();
+            case "MR" -> memoryRecall();
+            case "MC" -> memoryClear();
+            case "π" -> appendPi();
+            case "e" -> appendE();
+            default -> appendText(buttonText); // Digits and decimal point
         }
     }
 
@@ -249,28 +203,24 @@ public class JavaFXController {
         // Add to history before calculation
         String expression = formatNumber(firstOperand) + " " + operator + " " + formatNumber(secondOperand);
 
-        double result = 0;
+        double result;
         boolean error = false;
 
-        switch (operator) {
-            case "+":
-                result = firstOperand + secondOperand;
-                break;
-            case "-":
-                result = firstOperand - secondOperand;
-                break;
-            case "x":
-                result = firstOperand * secondOperand;
-                break;
-            case "÷":
+        result = switch (operator) {
+            case "+" -> firstOperand + secondOperand;
+            case "-" -> firstOperand - secondOperand;
+            case "x" -> firstOperand * secondOperand;
+            case "÷" -> {
                 if (secondOperand == 0) {
                     input.setText("Error: Division by zero");
                     error = true;
-                    break;
+                    // In switch statements, yield is used to return a value from the case block
+                    yield 0; // Return 0 in case of error
                 }
-                result = firstOperand / secondOperand;
-                break;
-        }
+                yield firstOperand / secondOperand;
+            }
+            default -> 0; // Default case to handle unexpected operators
+        };
 
         if (!error) {
             String formattedResult = formatNumber(result);

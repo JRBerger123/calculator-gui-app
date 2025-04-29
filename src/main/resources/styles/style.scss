@@ -1,6 +1,8 @@
+@use "_variables" as *;
+
 .calculator-display {
     -fx-font-size: 32px;
-    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-background-color: $display-color;
     -fx-text-fill: white;
     -fx-alignment: center-right;
     -fx-pref-height: 60px;
@@ -9,7 +11,7 @@
 
 .expression-display {
     -fx-font-size: 18px;
-    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-background-color: $display-color;
     -fx-text-fill: white;
     -fx-alignment: center-right;
     -fx-padding: 5px 10px;
@@ -38,61 +40,59 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 2, 0, 0, 1);
 }
 
-.digit {
-    -fx-background-color: rgba(0,0,0,0.5);
-    -fx-text-fill: rgb(255,255,255);
-}
-.digit:hover {
-    -fx-background-color: rgba(0,0,0,0.2);
-}
-.digit:pressed {
-    -fx-background-color: rgba(0,0,0,0.5);
+.primary-button {
+    -fx-background-color: $primary-button-color;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+
+    &:hover {
+        -fx-background-color: $secondary-button-color;
+    }
+
+    &:pressed {
+        -fx-background-color: $primary-pressed-color;
+    }
 }
 
-.operator {
-    -fx-background-color: rgba(0,0,0,0.5);
+.secondary-button {
+    -fx-background-color: $secondary-button-color;
     -fx-text-fill: white;
-}
-.operator:hover {
-    -fx-background-color: rgba(0,0,0,0.2);
-}
-.operator:pressed {
-    -fx-background-color: rgba(0,0,0,0.5);
-}
+    -fx-font-size: 18px;
 
-.function-button {
-    -fx-background-color: rgba(0,0,0,0.5);
-    -fx-text-fill: white;
-}
-.function-button:hover {
-    -fx-background-color: rgba(0,0,0,0.2);
-}
-.function-button:pressed {
-    -fx-background-color: rgba(0,0,0,0.5);
+    &:hover {
+        -fx-background-color: $primary-button-color;
+    }
+
+    &:pressed {
+        -fx-background-color: $primary-pressed-color;
+    }
 }
 
 .memory-button {
-    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-background-color: rgba(0, 0, 0, 0);
     -fx-text-fill: white;
     -fx-font-size: 16px;
-}
-.memory-button:hover {
-    -fx-background-color: rgba(0,0,0,0.2);
-}
-.memory-button:pressed {
-    -fx-background-color: rgba(0,0,0,0.5);
-}
+    
+    &:hover {
+        -fx-background-color: $secondary-button-color;
+    }
 
+    &:pressed {
+        -fx-background-color: $primary-pressed-color;
+    }
+}
 
 .equals {
-    -fx-background-color: rgba(0,0,0,0.5);
-    -fx-text-fill: white;
-}
-.equals:hover {
-    -fx-background-color: rgba(0,0,0,0.2);
-}
-.equals:pressed {
-    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-background-color: rgb(225, 131, 217);
+    -fx-text-fill: rgb(0, 0, 0);
+
+    &:hover {
+        -fx-background-color: rgb(205, 120, 199);
+    }
+
+    &:pressed {
+        -fx-background-color: rgb(154, 90, 149);
+    }
 }
 
 .side-panel {
@@ -120,7 +120,8 @@
     -fx-padding: 10px 0;
 }
 
-.history-panel, .memory-panel {
+.historyMemory-panel {
+    -fx-background-color: $display-color;
     -fx-spacing: 5px;
 }
 
