@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.event.ActionEvent;
 
 public class JavaFXController {
 
@@ -122,34 +123,65 @@ public class JavaFXController {
         memoryButton.setStyle("-fx-background-color: #27c0c5");
     }
 
+    @FXML
+    private void handleBackspace(ActionEvent event) {
+        backspace();
+    }
+
+    @FXML
+    private void handleMemoryClear(ActionEvent event) {
+        memoryClear();
+    }
+
+    @FXML
+    private void handleMemoryRecall(ActionEvent event) {
+        memoryRecall();
+    }
+
+    @FXML
+    private void handleMemoryAdd(ActionEvent event) {
+        memoryAdd();
+    }
+
+    @FXML
+    private void handleMemorySubtract(ActionEvent event) {
+        memorySubtract();
+    }
+
+    @FXML
+    private void handleMemorySave(ActionEvent event) {
+        memorySave();
+    }
+    @FXML
+    private void handleSquares(ActionEvent event) {
+        square();
+    }
+    @FXML
+    private void handleSquareRoots(ActionEvent event) {
+        sqrt();
+    }
+    @FXML
+    private void handleReciprocal(ActionEvent event) {
+        reciprocal();
+    }
+
     // All other methods remain the same
 
     @FXML
     @SuppressWarnings("unused")
-    private void handleLeftClick(javafx.event.ActionEvent event) {
+    private void handleLeftClick(ActionEvent event) {
         Button clickedButton = (Button) event.getSource();
         String buttonText = clickedButton.getText();
 
         switch (buttonText) {
             case "C" -> clear();
             case "CE" -> clearEntry();
-            case "⌫" -> backspace();
-            case "+", "-", "x", "÷" -> setOperator(buttonText);
+            case "+", "-", "x", "/" -> setOperator(buttonText);
             case "=" -> calculateResult();
             case "%" -> percent();
-            case "√" -> sqrt();
-            case "x²" -> square();
-            case "1/x" -> reciprocal();
             case "(-)" -> toggleSign();
             case "History" -> showHistoryPanel();
             case "Memory" -> showMemoryPanel();
-            case "MS" -> memorySave();
-            case "M+" -> memoryAdd();
-            case "M-" -> memorySubtract();
-            case "MR" -> memoryRecall();
-            case "MC" -> memoryClear();
-            case "π" -> appendPi();
-            case "e" -> appendE();
             default -> appendText(buttonText); // Digits and decimal point
         }
     }
@@ -207,7 +239,7 @@ public class JavaFXController {
             case "+" -> firstOperand + secondOperand;
             case "-" -> firstOperand - secondOperand;
             case "x" -> firstOperand * secondOperand;
-            case "÷" -> {
+            case "/" -> {
                 if (secondOperand == 0) {
                     input.setText("Error: Division by zero");
                     error = true;
@@ -322,6 +354,7 @@ public class JavaFXController {
         }
     }
 
+    @FXML
     private void reciprocal() {
         if (!currentInput.isEmpty()) {
             double value = Double.parseDouble(currentInput);
