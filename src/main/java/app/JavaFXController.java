@@ -4,13 +4,13 @@ import java.text.DecimalFormat;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.event.ActionEvent;
 
 public class JavaFXController {
 
@@ -37,10 +37,6 @@ public class JavaFXController {
 
     @FXML
     private Button memoryButton;
-
-    // TODO: Implement variable or remove it
-    @FXML
-    private VBox historyMemoryPanel;
 
     @FXML
     private ListView<String> historyMemoryListView;
