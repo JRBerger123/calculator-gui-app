@@ -85,6 +85,13 @@ public class JavaFXController {
     private int pendingOperationClosings = 0;
 
     /**
+     * Flag to indicate if the percent cycle is complete.
+     * This is used to track if the percent operation has been applied and needs to be converted back to decimal.
+     * This is used to prevent continuous dividing of the value by 100 when the percent button is pressed multiple times.
+     */
+    private boolean hasBeenPercented = false;
+
+    /**
      * Threshold for responsive layout. If the window width exceeds this value, the side panel is shown.
      * If the window width is less than this value, the side panel is hidden.
      */
@@ -443,6 +450,7 @@ public class JavaFXController {
             currentInput.setLength(0);
             startNewInput = false;
             operationJustPerformed = false;
+            resetPercentCycle();
 
             // Set the display type to "Input" as mainDisplay is now showing an input
             displayType.setText("Input");
@@ -993,13 +1001,14 @@ public class JavaFXController {
     }
 
     /**
-     * Toggles between percentage and decimal representation in the main display.
-     * If the current value doesn't have a percent sign, multiplies by 100 and adds "%".
-     * If the current value already has a percent sign, divides by 100 and removes "%".
-     * This operation only affects the main display and doesn't modify the expression display.
+     * Handles percentage operations with context-aware behavior.
+     * When applied to input: Simply appends % symbol (without multiplication)
+     * When applied to result: Multiplies by 100 and adds % symbol
+     * Allows toggling between percentage and decimal representation multiple times.
      */
     private void togglePercentDisplay() {
         String currentText = mainDisplay.getText();
+        String displayState = displayType.getText();
         
         try {
             if (currentText.endsWith("%")) {
@@ -1015,34 +1024,54 @@ public class JavaFXController {
                 // Update current input with the decimal value
                 currentInput.setLength(0);
                 currentInput.append(formatted);
+                
+                // When converting from percent to decimal, startNewInput should be false
+                startNewInput = false;
+                operationJustPerformed = false;
+                
+                // Mark that this value has been through percent conversion
+                hasBeenPercented = true;
             } else {
                 // Convert from decimal to percentage
                 double value = Double.parseDouble(currentText);
-                double percentValue = value * 100.0;
+                double percentValue;
                 
-                // Format the percentage value (without using formatNumber to preserve all digits)
+                // If in input mode and not previously percented, use direct percentage
+                // Otherwise multiply by 100 for proper percentage representation
+                if ("Input".equals(displayState) && !hasBeenPercented) {
+                    percentValue = value;  // Direct percentage without multiplication
+                } else {
+                    percentValue = value * 100.0;  // Standard percentage conversion
+                }
+                
+                // Format the percentage value
                 String formatted;
                 if (percentValue == (long) percentValue) {
                     formatted = String.format("%d%%", (long) percentValue);
                 } else {
-                    // Use the decimal formatter but handle the percent sign manually
                     formatted = df.format(percentValue) + "%";
                 }
                 
                 mainDisplay.setText(formatted);
                 
-                // Update current input with the percentage value (including % sign)
+                // Update current input with the percentage value
                 currentInput.setLength(0);
                 currentInput.append(formatted);
+                
+                // When converting to percent, startNewInput should be true
+                startNewInput = true;
+                operationJustPerformed = false;
             }
-            
-            // Mark that we should start a new input next if another number is pressed
-            startNewInput = true;
-            operationJustPerformed = false;
         } catch (NumberFormatException e) {
             mainDisplay.setText("Error");
             System.err.println("Error in percent toggle: " + e.getMessage());
         }
+    }
+
+    // Resets the percent cycle state (applying percent and de-applying percent)
+    // Add this to any method that changes the input or starts a new calculation
+    private void resetPercentCycle() {
+        hasBeenPercented = false;
     }
 
     /**

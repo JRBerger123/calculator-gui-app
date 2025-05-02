@@ -1,16 +1,29 @@
-// Button colors
+// #region Button Colors
+
+// -- Primary buttons --
 $primary-button-color: rgb(58, 60, 63); // used for primary buttons (digits, etc.)
-$secondary-button-color: rgb(48, 51, 54); // used for secondary buttons (operators ,etc.)
-$tertiary-button-color: rgb(225, 131, 217); // used for tertiary buttons (equals, etc.)
-
-$tertiary-hover-color: rgb(154, 90, 149); // used for tertiary buttons when hovered
-
 $primary-pressed-color: rgb(41, 41, 41); // used for primary buttons when pressed
+
+// -- Secondary buttons --
+$secondary-button-color: rgb(48, 51, 54); // used for secondary buttons (operators, etc.)
+
+// -- Tertiary buttons --
+$tertiary-button-color: rgb(225, 131, 217); // used for tertiary buttons (equals, etc.)
+$tertiary-hover-color: rgb(154, 90, 149); // used for tertiary buttons when hovered
 $tertiary-pressed-color: rgb(177, 54, 164); // used for tertiary buttons when pressed
 
+// #endregion
 
-// Other colors
+// #region Text Colors
+
 $primary-text-color: white; // used for text on most buttons and display
 $secondary-text-color: rgb(0, 0, 0); // used for secondary text (equals, etc.)
+
+// #endregion
+
+// #region Background Colors
+
 $display-color: rgba(0,0,0,0.5); // used for display background
 $calculator-color: rgb(62, 62, 62); // used for calculator background
+
+// #endregion
