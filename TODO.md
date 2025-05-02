@@ -30,6 +30,7 @@
 - [x] Implement copy answer feature
 - [x] Implement paste input feature
 - [x] Add keyboard input support
+- [ ] If using the same operator repeatedly, should operate on the result with the last operator and input
 
 ## Documentation
 
@@ -38,12 +39,11 @@
 
 ## Fix Errors
 
-- [ ] Negative button breaks if used on any other value except the first value
+- [x] Negative button breaks if used on any other value except the first value
 - [ ] Handle mathematical edge cases, such as dividing by 0
 - [ ] Implement error handling involving displaying the error type on the mainDisplay
-- [ ] Equals does not update expressionDisplay if the previous expressionDisplay includes only a value and equals sign (e.g., 2 =, 4 =)
-- [ ] ExpressionDisplay does not clear when a new input starts after equals has been pressed
-- [ ] M+ and M- buttons are not implemented
+- [x] Equals does not update expressionDisplay if the previous expressionDisplay includes only a value and equals sign (e.g., 2 =, 4 =)
+- [x] ExpressionDisplay does not clear when a new input starts after equals has been pressed
 - [x] Change percentage logic to append percent without multiplication if input, and append percent with multiplication if result
 
 ## Other

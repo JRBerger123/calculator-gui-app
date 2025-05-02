@@ -20,7 +20,7 @@
 
         <HBox styleClass="settings-container" maxWidth="Infinity" HBox.hgrow="ALWAYS">
             <!-- Menu Button-->
-            <Button fx:id="menuButton" onAction="#handleLeftClick" styleClass="menu-button" maxWidth="Infinity">
+            <Button fx:id="contextMenuButton" onAction="#handleLeftClick" styleClass="menu-button" maxWidth="Infinity">
                 <graphic>
                     <javafx.scene.shape.SVGPath fill="white" scaleX="1" scaleY="1">
                         <content>M0 0h24v4H0V0zm0 7h24v4H0V7zm0 7h24v4H0v-4z</content>
@@ -38,7 +38,7 @@
         <VBox styleClass="display-container">
             <Label fx:id="expressionDisplay" styleClass="expression-display" maxWidth="Infinity" />
             <VBox styleClass="main-display" maxWidth="Infinity" VBox.vgrow="ALWAYS">
-                <Label fx:id="displayType" text="Input" styleClass="display-type" maxWidth="Infinity" />
+                <Label fx:id="displayTypeLabel" text="Input" styleClass="display-type" maxWidth="Infinity" />
                 <Label fx:id="mainDisplay" text="0" styleClass="calculator-display" maxWidth="Infinity" />
             </VBox>
         </VBox>
@@ -58,7 +58,7 @@
             <!-- Row: Clear Functions -->
             <HBox spacing="5" VBox.vgrow="ALWAYS">
                 <!-- The percentButton text is intentionally left blank because % character cannot be used in FXML -->
-                <Button fx:id="percentButton" onAction="#handleLeftClick" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="togglePercentButton" onAction="#handleLeftClick" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <Button fx:id="ceButton" onAction="#handleLeftClick" text="CE" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <Button fx:id="cButton" onAction="#handleLeftClick" text="C" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <Button fx:id="backspaceButton" onAction="#handleLeftClick" text="⌫" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
@@ -122,7 +122,7 @@
 
         <!-- History and Memory Panel -->
         <VBox fx:id="historyMemoryPanel" styleClass="historyMemory-panel" VBox.vgrow="ALWAYS">
-            <ListView fx:id="historyMemoryListView" VBox.vgrow="ALWAYS"/>
+            <ListView fx:id="sidePanelListView" VBox.vgrow="ALWAYS"/>
         </VBox>
     </VBox>
 

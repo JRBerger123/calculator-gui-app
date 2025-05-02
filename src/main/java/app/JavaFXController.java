@@ -52,19 +52,19 @@ public class JavaFXController {
      * This label indicates whether the current display is showing an input or a result.
      * It is updated dynamically based on the calculator's state.
      */
-    @FXML private Label displayType;
+    @FXML private Label displayTypeLabel;
 
     /**
      * Button for clearing all entries in the calculator.
      */
-    @FXML private Button percentButton;
+    @FXML private Button togglePercentButton;
 
     /**
      * Button for opening context menu for additional options.
      * This button is used to toggle the visibility of the context menu.
      * The context menu is hidden by default and can be shown by clicking this button.
      */
-    @FXML private Button menuButton;
+    @FXML private Button contextMenuButton;
 
     /**
      * GUI element for the context menu.
@@ -110,7 +110,7 @@ public class JavaFXController {
      * ListView for displaying the history or memory of calculations.
      * Element that allows for the showing of history or memory list in a stack data structure.
      */
-    @FXML private ListView<String> historyMemoryListView;
+    @FXML private ListView<String> sidePanelListView;
 
     /**
      * Flag to indicate if the calculator is in dark mode.
@@ -135,12 +135,12 @@ public class JavaFXController {
     /**
      * DecimalFormat for formatting numbers in decimal notation.
      */
-    private final DecimalFormat df = new DecimalFormat("#.##########");
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.##########");
 
     /**
      * DecimalFormat for scientific notation with 6 decimal places.
      */
-    private final DecimalFormat scientificDF = new DecimalFormat("0.######E0");
+    private final DecimalFormat scientificFormat = new DecimalFormat("0.######E0");
 
     /**
      * Full expression shown in expressionDisplay above the mainDisplay.
@@ -150,7 +150,7 @@ public class JavaFXController {
     /**
      * Current input shown in mainDisplay
      */
-    private final StringBuilder currentInput = new StringBuilder();
+    private final StringBuilder currentInputBuilder = new StringBuilder();
 
     /**
      * Keeps track of the actual JavaScript expression for evaluation.
@@ -173,7 +173,7 @@ public class JavaFXController {
     /**
      * Flag to indicate if an operation was just performed.
      */
-    private boolean operationJustPerformed = false;
+    private boolean hasJustPerformedOperation = false;
     
     /**
      * Pending unary operation type. This is used to track the current unary operation being applied.
@@ -183,20 +183,20 @@ public class JavaFXController {
     /**
      * List of pending operation closings. This is used to track the number of closing parentheses needed for unary operations.
      */
-    private int pendingOperationClosings = 0;
+    private int unclosedParenthesesCount = 0;
 
     /**
      * Flag to indicate if the percent cycle is complete.
      * This is used to track if the percent operation has been applied and needs to be converted back to decimal.
      * This is used to prevent continuous dividing of the value by 100 when the percent button is pressed multiple times.
      */
-    private boolean hasBeenPercented = false;
+    private boolean isPercentFormatActive = false;
 
     /**
      * Flag to indicate if the context menu is currently visible.
      * This is used to toggle the visibility of the context menu when the menu button is clicked.
      */
-    private boolean contextMenuVisible = false;
+    private boolean isContextMenuVisible = false;
 
     /**
      * Threshold for responsive layout. If the window width exceeds this value, the side panel is shown.
@@ -231,7 +231,7 @@ public class JavaFXController {
             System.out.println("JavaScript engine created successfully: " + engine.getClass().getName() + "\n");
             
             // Set text for the percent button is required as % is used as a special character in JavaFX and cannot be set directly in FXML
-            percentButton.setText("%");
+            togglePercentButton.setText("%");
 
             resetCalculator();
 
@@ -280,7 +280,7 @@ public class JavaFXController {
                             if (Character.isDigit(c) || c == '.') {
                                 appendToInput(String.valueOf(c));
                             } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-                                handleOperator(String.valueOf(c));
+                                processOperatorInput(String.valueOf(c));
                             }
                             // Ignore other characters
                         }
@@ -294,9 +294,9 @@ public class JavaFXController {
 
             // Close the context menu if clicking elsewhere
             root.setOnMouseClicked(event -> {
-                if (!contextMenu.isHover() && !menuButton.isHover()) {
+                if (!contextMenu.isHover() && !contextMenuButton.isHover()) {
                     contextMenu.setVisible(false);
-                    contextMenuVisible = false;
+                    isContextMenuVisible = false;
                 }
             });
 
@@ -325,13 +325,13 @@ public class JavaFXController {
             if (newScene != null) {
                 boolean shouldShow = newScene.getWidth() > RESPONSIVE_THRESHOLD;
                 sidePanel.setVisible(shouldShow);
-                adjustCalculatorLayout(shouldShow);
+                setSidePanelVisibility(shouldShow);
 
                 // Add listener to the scene width property to adjust the side panel visibility based on scene (window) width
                 newScene.widthProperty().addListener((obsW, oldW, newW) -> {
                     boolean showPanel = newW.doubleValue() > RESPONSIVE_THRESHOLD;
                     sidePanel.setVisible(showPanel);
-                    adjustCalculatorLayout(showPanel);
+                    setSidePanelVisibility(showPanel);
                 });
             }
         });
@@ -341,7 +341,7 @@ public class JavaFXController {
      * Adjusts the layout of the calculator based on whether the side panel should be visible or not.
      * @param sidePanelVisible True if the side panel should be visible, false otherwise.
      */
-    private void adjustCalculatorLayout(boolean sidePanelVisible) {
+    private void setSidePanelVisibility(boolean sidePanelVisible) {
         // Sets the exact width of the side panel when visible versus hidden
         AnchorPane.setRightAnchor(calculatorRoot, sidePanelVisible ? 245.0 : 0.0);
     }
@@ -376,10 +376,10 @@ public class JavaFXController {
             case "backspaceButton" -> backspace();
             case "equalsButton" -> evaluateExpression();
 
-            case "plusButton" -> handleOperator("+");
-            case "minusButton" -> handleOperator("-");
-            case "multiplyButton" -> handleOperator("*");
-            case "divideButton" -> handleOperator("/");
+            case "plusButton" -> processOperatorInput("+");
+            case "minusButton" -> processOperatorInput("-");
+            case "multiplyButton" -> processOperatorInput("*");
+            case "divideButton" -> processOperatorInput("/");
             
             case "decimalButton" -> appendToInput(".");
 
@@ -394,7 +394,7 @@ public class JavaFXController {
             case "eightButton" -> appendToInput("8");
             case "nineButton" -> appendToInput("9");
 
-            case "percentButton" -> togglePercentDisplay();
+            case "togglePercentButton" -> togglePercentFormat();
             case "squareButton" -> applyUnaryOperation("square");
             case "squareRootButton" -> applyUnaryOperation("sqrt");
             case "reciprocalButton" -> applyUnaryOperation("reciprocal");
@@ -406,12 +406,13 @@ public class JavaFXController {
             case "mrButton" -> recallMemory();
             case "msButton" -> memoryList.add(0, mainDisplay.getText());
 
-            case "menuButton" -> handleMenuToggle();
+            case "contextMenuButton" -> handleMenuToggle();
 
             default -> System.err.println("Unhandled button ID: " + id);
         }
     }
 
+    // TODO: add functionality to allow other keyboard layouts
     /**
      * Handles key presses for keyboard input.
      * Assumes keyboard layout is US-QWERTY.
@@ -441,14 +442,14 @@ public class JavaFXController {
             case DIGIT8 -> {
                 if (shiftDown) {
                     // * (asterisk) - multiply
-                    handleOperator("*");
+                    processOperatorInput("*");
                     event.consume();
                 }
             }
             case EQUALS -> {
                 if (shiftDown) {
                     // + (plus sign on equals key with shift)
-                    handleOperator("+");
+                    processOperatorInput("+");
                     event.consume();
                 } else {
                     // = (equals sign without shift)
@@ -458,23 +459,23 @@ public class JavaFXController {
             }
             case PLUS -> {
                 // + (dedicated plus key)
-                handleOperator("+");
+                processOperatorInput("+");
                 event.consume();
             }
             case MINUS -> {
                 // - (minus/hyphen)
-                handleOperator("-");
+                processOperatorInput("-");
                 event.consume();
             }
             case SLASH -> {
                 // / (forward slash)
-                handleOperator("/");
+                processOperatorInput("/");
                 event.consume();
             }
             case DIGIT5 -> {
                 if (shiftDown) {
                     // % (percent sign, SHIFT+5)
-                    togglePercentDisplay();
+                    togglePercentFormat();
                     event.consume();
                 }
             }
@@ -549,12 +550,12 @@ public class JavaFXController {
         String keyText = event.getText();
         if (!keyText.isEmpty() && !event.isConsumed()) {
             switch (keyText) {
-                case "+" -> { handleOperator("+"); event.consume(); }
-                case "-" -> { handleOperator("-"); event.consume(); }
-                case "*" -> { handleOperator("*"); event.consume(); }
-                case "/" -> { handleOperator("/"); event.consume(); }
+                case "+" -> { processOperatorInput("+"); event.consume(); }
+                case "-" -> { processOperatorInput("-"); event.consume(); }
+                case "*" -> { processOperatorInput("*"); event.consume(); }
+                case "/" -> { processOperatorInput("/"); event.consume(); }
                 case "=" -> { evaluateExpression(); event.consume(); }
-                case "%" -> { togglePercentDisplay(); event.consume(); }
+                case "%" -> { togglePercentFormat(); event.consume(); }
                 case "." -> { appendToInput("."); event.consume(); }
             }
         }
@@ -567,32 +568,35 @@ public class JavaFXController {
     private void appendToInput(String value) {
         // If an operation was just performed or we're starting a new input,
         // clear the current input
-        if (startNewInput || operationJustPerformed) {
-            currentInput.setLength(0);
+        if (startNewInput && !hasJustPerformedOperation) {
+            expressionBuilder.setLength(0);
+            expressionDisplay.setText("");
+        }
+        if (startNewInput || hasJustPerformedOperation) {
+            currentInputBuilder.setLength(0);
             startNewInput = false;
-            operationJustPerformed = false;
+            hasJustPerformedOperation = false;
             resetPercentCycle();
 
             // Set the display type to "Input" as mainDisplay is now showing an input
-            displayType.setText("Input");
-            displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
+            setDisplayTypeLabel(true);
         }
         
         // Handle special case for decimal point
-        if (value.equals(".") && currentInput.toString().contains(".")) {
+        if (value.equals(".") && currentInputBuilder.toString().contains(".")) {
             return; // Prevent multiple decimal points
         }
         
         // Handle special case for zero at the beginning
-        if (currentInput.toString().equals("0") && !value.equals(".")) {
-            currentInput.setLength(0);
+        if (currentInputBuilder.toString().equals("0") && !value.equals(".")) {
+            currentInputBuilder.setLength(0);
         }
         
         // Append the value to the current input
-        currentInput.append(value);
+        currentInputBuilder.append(value);
         
         // Update the main display with the current input
-        mainDisplay.setText(currentInput.toString());
+        mainDisplay.setText(currentInputBuilder.toString());
     }
     
     /**
@@ -601,15 +605,15 @@ public class JavaFXController {
      * 
      * @param operator The operator to apply
      */
-    private void handleOperator(String operator) {
+    private void processOperatorInput(String operator) {
         // Convert percentage to decimal if needed
         if (mainDisplay.getText().endsWith("%")) {
             try {
                 double value = parseDisplayValue(mainDisplay.getText());
                 String decimalStr = formatNumber(value);
                 mainDisplay.setText(decimalStr);
-                currentInput.setLength(0);
-                currentInput.append(decimalStr);
+                currentInputBuilder.setLength(0);
+                currentInputBuilder.append(decimalStr);
             } catch (NumberFormatException e) {
                 mainDisplay.setText("Error");
                 System.err.println("Error converting percentage: " + e.getMessage());
@@ -618,10 +622,10 @@ public class JavaFXController {
         }
         
         // If there's a current input, add it to the expression
-        if (!operationJustPerformed) {
-            if (currentInput.length() > 0) {
-                expressionBuilder.append(currentInput);
-                jsExpressionBuilder.append(currentInput);
+        if (!hasJustPerformedOperation) {
+            if (currentInputBuilder.length() > 0) {
+                expressionBuilder.append(currentInputBuilder);
+                jsExpressionBuilder.append(currentInputBuilder);
             } else {
                 // If no current input, append 0 before operator
                 expressionBuilder.append("0");
@@ -630,10 +634,10 @@ public class JavaFXController {
         }
         
         // Close any pending operations
-        while (pendingOperationClosings > 0) {
+        while (unclosedParenthesesCount > 0) {
             expressionBuilder.append(")");
             jsExpressionBuilder.append(")");
-            pendingOperationClosings--;
+            unclosedParenthesesCount--;
         }
         pendingUnaryOperation = null;
         
@@ -647,28 +651,27 @@ public class JavaFXController {
         }
         
         // Append the operator to the expression
-        expressionBuilder.append(operator);
+        expressionBuilder.append(" ").append(operator).append(" ");
         jsExpressionBuilder.append(operator);
         
         // Update the expression display
         expressionDisplay.setText(expressionBuilder.toString());
         
         // Evaluate the expression so far and show the result in the main display
-        evaluatePartialExpression();
+        evaluateAndUpdateDisplay();
         
         // Mark that an operation was just performed
-        operationJustPerformed = true;
+        hasJustPerformedOperation = true;
 
         // Update the display type to "Result" to indicate the main display shows a result
-        displayType.setText("Result");
-        displayType.setStyle("-fx-text-fill: rgba(0, 255, 0, 0.6);");
+        setDisplayTypeLabel(false);
     }
 
     /**
      * Evaluates the partial expression so far and updates the main display with the result.
      * Ensures all percentage values are properly converted to decimals.
      */
-    private void evaluatePartialExpression() {
+    private void evaluateAndUpdateDisplay() {
         // Only evaluate if there's something to evaluate
         if (jsExpressionBuilder.length() > 0) {
             try {
@@ -682,17 +685,19 @@ public class JavaFXController {
                 
                 // Only evaluate if there's a valid expression
                 if (!tempExpression.isEmpty()) {
+                    tempExpression = normalizeExpression(tempExpression);
+
                     Object result = engine.eval(tempExpression);
                     String resultStr = formatNumber(Double.parseDouble(result.toString()));
+                    
                     mainDisplay.setText(resultStr);
                     
                     // Store the result as the current input for the next operation
-                    currentInput.setLength(0);
-                    currentInput.append(resultStr);
+                    currentInputBuilder.setLength(0);
+                    currentInputBuilder.append(resultStr);
 
                     // Update the display type to "Result" to indicate the main display shows a result
-                    displayType.setText("Result");
-                    displayType.setStyle("-fx-text-fill: rgba(0, 255, 0, 0.6);");
+                    setDisplayTypeLabel(false);
                 }
             } catch (ScriptException | NumberFormatException e) {
                 // If there's an error, don't update the display
@@ -708,32 +713,24 @@ public class JavaFXController {
     private void evaluateExpression() {
         // Convert percentage to decimal if needed
         if (mainDisplay.getText().endsWith("%")) {
-            try {
-                double value = parseDisplayValue(mainDisplay.getText());
-                String decimalStr = formatNumber(value);
-                mainDisplay.setText(decimalStr);
-                currentInput.setLength(0);
-                currentInput.append(decimalStr);
-            } catch (NumberFormatException e) {
-                mainDisplay.setText("Error");
-                System.err.println("Error converting percentage: " + e.getMessage());
-                return;
-            }
+            togglePercentFormat();
         }
         
         // If there's a current input and an operation wasn't just performed,
         // add it to the expression
-        if (currentInput.length() > 0 && !operationJustPerformed) {
-            expressionBuilder.append(currentInput);
-            jsExpressionBuilder.append(currentInput);
+        if (currentInputBuilder.length() > 0 && !hasJustPerformedOperation) {
+            expressionBuilder.append(currentInputBuilder);
+            jsExpressionBuilder.append(currentInputBuilder);
         }
         
         // Close any pending operations
-        while (pendingOperationClosings > 0) {
+        while (unclosedParenthesesCount > 0) {
             expressionBuilder.append(")");
             jsExpressionBuilder.append(")");
-            pendingOperationClosings--;
+            unclosedParenthesesCount--;
         }
+
+        // Reset pending unary operation
         pendingUnaryOperation = null;
         
         // Only evaluate if there's an expression
@@ -750,6 +747,9 @@ public class JavaFXController {
                     expressionBuilder.setLength(displayExpressionStr.length());
                     jsExpressionBuilder.setLength(jsExpressionStr.length());
                 }
+
+                // Normalize the expression to fix syntax issues like double negatives
+                jsExpressionStr = normalizeExpression(jsExpressionStr);
                 
                 // Use jsExpressionStr for evaluation
                 Object result = engine.eval(jsExpressionStr);
@@ -758,31 +758,48 @@ public class JavaFXController {
                 // Add to history
                 historyList.add(0, displayExpressionStr + " = " + resultStr);
                 
-                // Update displays
+                // Show the result in the main display
                 mainDisplay.setText(resultStr);
                 if (!expressionDisplay.getText().endsWith(" =")) {
                     expressionDisplay.setText(displayExpressionStr + " =");
                 }
 
                 // Update the display type to "Result" to indicate the main display shows a result
-                displayType.setText("Result");
-                displayType.setStyle("-fx-text-fill: rgba(0, 255, 0, 0.6);");
+                setDisplayTypeLabel(false);
                 
                 // Reset state
                 expressionBuilder.setLength(0);
                 jsExpressionBuilder.setLength(0);
-                currentInput.setLength(0);
-                currentInput.append(resultStr);
+                currentInputBuilder.setLength(0);
+                currentInputBuilder.append(resultStr);
                 startNewInput = true;
-                operationJustPerformed = false;
+                hasJustPerformedOperation = false;
                 pendingUnaryOperation = null;
-                pendingOperationClosings = 0;
+                unclosedParenthesesCount = 0;
             } catch (ScriptException | NumberFormatException e) {
                 mainDisplay.setText("Error");
                 System.err.println("Expression error: " + e.getMessage());
                 resetCalculator();
             }
         }
+    }
+
+    /**
+     * Normalizes an expression to ensure it's compatible with JavaScript evaluation.
+     * Specifically handles cases like double negatives (--) which cause syntax errors.
+     * 
+     * @param expression The expression to normalize
+     * @return A JavaScript-compatible expression
+     */
+    private String normalizeExpression(String expression) {
+        // Replace double negatives with a plus
+        String normalized = expression.replaceAll("--", "+");
+        
+        // Replace combinations like "+-" or "-+" with a single minus
+        normalized = normalized.replaceAll("\\+-", "-");
+        normalized = normalized.replaceAll("-\\+", "-");
+        
+        return normalized;
     }
 
     /**
@@ -799,17 +816,16 @@ public class JavaFXController {
     private void resetCalculator() {
         expressionBuilder.setLength(0);
         jsExpressionBuilder.setLength(0);
-        currentInput.setLength(0);
+        currentInputBuilder.setLength(0);
         mainDisplay.setText("0");
         expressionDisplay.setText("");
         startNewInput = true;
-        operationJustPerformed = false;
+        hasJustPerformedOperation = false;
         pendingUnaryOperation = null;
-        pendingOperationClosings = 0;
+        unclosedParenthesesCount = 0;
 
         // Set the display type to "Input" as mainDisplay is now showing an input
-        displayType.setText("Input");
-        displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
+        setDisplayTypeLabel(true);
     }
 
     /**
@@ -817,7 +833,7 @@ public class JavaFXController {
      */
     private void clearEntry() {
         // Clear only the current entry/input
-        currentInput.setLength(0);
+        currentInputBuilder.setLength(0);
         mainDisplay.setText("0");
         startNewInput = true;
     }
@@ -828,9 +844,9 @@ public class JavaFXController {
      */
     private void backspace() {
         // Only allow backspace on the current input, not on results
-        if (!startNewInput && !operationJustPerformed && currentInput.length() > 0) {
-            currentInput.deleteCharAt(currentInput.length() - 1);
-            mainDisplay.setText(currentInput.length() > 0 ? currentInput.toString() : "0");
+        if (!startNewInput && !hasJustPerformedOperation && currentInputBuilder.length() > 0) {
+            currentInputBuilder.deleteCharAt(currentInputBuilder.length() - 1);
+            mainDisplay.setText(currentInputBuilder.length() > 0 ? currentInputBuilder.toString() : "0");
         }
     }
 
@@ -854,7 +870,7 @@ public class JavaFXController {
             
             // Convert percentage to decimal if needed
             if (mainDisplay.getText().endsWith("%") && !type.equals("percent")) {
-                togglePercentDisplay();
+                togglePercentFormat();
             }
             
             // Get the value from the main display, handling percent signs
@@ -919,18 +935,17 @@ public class JavaFXController {
                 
                 // Set flags to prepare for the next input
                 startNewInput = true;
-                operationJustPerformed = false; // Allow next digit input to replace display
+                hasJustPerformedOperation = false; // Allow next digit input to replace display
                 
                 // Set the display type to "Input" as mainDisplay is now showing an input
-                displayType.setText("Input");
-                displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
+                setDisplayTypeLabel(true);
                 
                 // Store operation info for later completion
                 pendingUnaryOperation = type;
-                pendingOperationClosings++;
+                unclosedParenthesesCount++;
                 
                 return;
-            } else if (pendingUnaryOperation != null && operationJustPerformed) {
+            } else if (pendingUnaryOperation != null && hasJustPerformedOperation) {
                 // We're nesting operations (e.g., sqrt(sqrt(...)))
                 
                 // Update the expression display with the operation prefix
@@ -944,15 +959,14 @@ public class JavaFXController {
                 
                 // Set flags to prepare for the next input
                 startNewInput = true;
-                operationJustPerformed = false; // Allow next digit input to replace display
+                hasJustPerformedOperation = false; // Allow next digit input to replace display
                 
                 // Set the display type to "Input" as mainDisplay is now showing an input
-                displayType.setText("Input");
-                displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
+                setDisplayTypeLabel(true);
                 
                 // Store operation info for later completion
                 pendingUnaryOperation = type;
-                pendingOperationClosings++;
+                unclosedParenthesesCount++;
                 
                 return;
             }
@@ -976,8 +990,8 @@ public class JavaFXController {
             mainDisplay.setText(formatted);
             
             // Update the display type to "Result" to indicate the main display shows a result
-            displayType.setText("Result");
-            displayType.setStyle("-fx-text-fill: rgba(0, 255, 0, 0.6);");
+            
+            setDisplayTypeLabel(false);
             
             // Create the display representation
             String operationDisplay = operationPrefix + valueStr + operationSuffix;
@@ -1042,12 +1056,12 @@ public class JavaFXController {
             }
             
             // Update current input with the result
-            currentInput.setLength(0);
-            currentInput.append(formatted);
+            currentInputBuilder.setLength(0);
+            currentInputBuilder.append(formatted);
             
             // Mark that we should start a new input next
             startNewInput = true;
-            operationJustPerformed = true;
+            hasJustPerformedOperation = true;
             
         } catch (NumberFormatException e) {
             mainDisplay.setText("Error");
@@ -1065,16 +1079,15 @@ public class JavaFXController {
             mainDisplay.setText(memoryValue);
             
             // Update current input with recalled value
-            currentInput.setLength(0);
-            currentInput.append(memoryValue);
+            currentInputBuilder.setLength(0);
+            currentInputBuilder.append(memoryValue);
             
             // Mark that we should continue with this input
             startNewInput = false;
-            operationJustPerformed = false;
+            hasJustPerformedOperation = false;
 
             // Set the display type to "Input" as mainDisplay is now showing an input
-            displayType.setText("Input");
-            displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
+            setDisplayTypeLabel(true);
         }
     }
 
@@ -1082,7 +1095,7 @@ public class JavaFXController {
      * Sets the list in the side panel to the history list and updates the button styles to indicate the active list.
      */
     private void showHistoryPanel() {
-        historyMemoryListView.setItems(historyList);
+        sidePanelListView.setItems(historyList);
         historyButton.setStyle("-fx-background-color: #27c0c5");
         memoryButton.setStyle("-fx-background-color: #bdbdbd");
     }
@@ -1091,7 +1104,7 @@ public class JavaFXController {
      * Sets the list in the side panel to the memory list and updates the button styles to indicate the active list.
      */
     private void showMemoryPanel() {
-        historyMemoryListView.setItems(memoryList);
+        sidePanelListView.setItems(memoryList);
         historyButton.setStyle("-fx-background-color: #bdbdbd");
         memoryButton.setStyle("-fx-background-color: #27c0c5");
     }
@@ -1114,11 +1127,11 @@ public class JavaFXController {
         
         // Handle scientific notation for very large or small numbers
         if (Math.abs(value) < 0.0000001 || Math.abs(value) > 10000000) {
-            return scientificDF.format(value);
+            return scientificFormat.format(value);
         }
         
         // Use decimal formatter for regular numbers
-        return df.format(value);
+        return decimalFormat.format(value);
     }
 
     /**
@@ -1127,9 +1140,9 @@ public class JavaFXController {
      * When applied to result: Multiplies by 100 and adds % symbol
      * Allows toggling between percentage and decimal representation multiple times.
      */
-    private void togglePercentDisplay() {
+    private void togglePercentFormat() {
         String currentText = mainDisplay.getText();
-        String displayState = displayType.getText();
+        String displayState = displayTypeLabel.getText();
         
         try {
             if (currentText.endsWith("%")) {
@@ -1143,15 +1156,15 @@ public class JavaFXController {
                 mainDisplay.setText(formatted);
                 
                 // Update current input with the decimal value
-                currentInput.setLength(0);
-                currentInput.append(formatted);
+                currentInputBuilder.setLength(0);
+                currentInputBuilder.append(formatted);
                 
                 // When converting from percent to decimal, startNewInput should be false
                 startNewInput = false;
-                operationJustPerformed = false;
+                hasJustPerformedOperation = false;
                 
                 // Mark that this value has been through percent conversion
-                hasBeenPercented = true;
+                isPercentFormatActive = true;
             } else {
                 // Convert from decimal to percentage
                 double value = Double.parseDouble(currentText);
@@ -1159,7 +1172,7 @@ public class JavaFXController {
                 
                 // If in input mode and not previously percented, use direct percentage
                 // Otherwise multiply by 100 for proper percentage representation
-                if ("Input".equals(displayState) && !hasBeenPercented) {
+                if ("Input".equals(displayState) && !isPercentFormatActive) {
                     percentValue = value;  // Direct percentage without multiplication
                 } else {
                     percentValue = value * 100.0;  // Standard percentage conversion
@@ -1170,18 +1183,18 @@ public class JavaFXController {
                 if (percentValue == (long) percentValue) {
                     formatted = String.format("%d%%", (long) percentValue);
                 } else {
-                    formatted = df.format(percentValue) + "%";
+                    formatted = decimalFormat.format(percentValue) + "%";
                 }
                 
                 mainDisplay.setText(formatted);
                 
                 // Update current input with the percentage value
-                currentInput.setLength(0);
-                currentInput.append(formatted);
+                currentInputBuilder.setLength(0);
+                currentInputBuilder.append(formatted);
                 
                 // When converting to percent, startNewInput should be true
                 startNewInput = true;
-                operationJustPerformed = false;
+                hasJustPerformedOperation = false;
             }
         } catch (NumberFormatException e) {
             mainDisplay.setText("Error");
@@ -1192,7 +1205,7 @@ public class JavaFXController {
     // Resets the percent cycle state (applying percent and de-applying percent)
     // Add this to any method that changes the input or starts a new calculation
     private void resetPercentCycle() {
-        hasBeenPercented = false;
+        isPercentFormatActive = false;
     }
 
     /**
@@ -1219,14 +1232,25 @@ public class JavaFXController {
      */
     @FXML
     private void handleMenuToggle() {
-        contextMenuVisible = !contextMenuVisible;
-        contextMenu.setVisible(contextMenuVisible);
+        isContextMenuVisible = !isContextMenuVisible;
+        contextMenu.setVisible(isContextMenuVisible);
     }
 
-    @FXML private void loadStandard()    { swapLayout("/app/CalculatorLayout.fxml"); }
+    /**
+     * Loads the standard calculator layout.
+     * This is the default layout and is loaded when the application starts.
+     */
+    @FXML private void loadStandard() { swapLayout("/app/CalculatorLayout.fxml"); }
+
+    /**
+     * Loads the scientific calculator layout.
+     * This method is not yet implemented and currently prints a message to the console.
+     */
     @FXML private void loadScientific() { swapLayout("/app/ScientificCalculatorLayout.fxml"); }
+
     private void swapLayout(String fxmlName) {
-     /*   try {
+        /*   
+        try {
             Parent newRoot = FXMLLoader.load(
                     getClass().getResource(fxmlName)
             );
@@ -1235,7 +1259,8 @@ public class JavaFXController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-      */
+        */
+        // Cannot swap layout yet, as not all elements in the FXML file are implemented
         System.out.println("Layout swapping not supported yet");
     }
 
@@ -1310,5 +1335,17 @@ public class JavaFXController {
     @FXML
     private void handleMemoryMinus(ActionEvent event){
         memorySubtract();
+    }
+
+    private void setDisplayTypeLabel(boolean isInput) {
+        if (isInput) {
+            // Update the display type to "Input" to indicate the main display shows an input
+            displayTypeLabel.setText("Input");
+            displayTypeLabel.setStyle("-fx-text-fill: rgba(238, 255, 0, 0.6);");
+        } else {
+            // Update the display type to "Result" to indicate the main display shows a result
+            displayTypeLabel.setText("Result");
+            displayTypeLabel.setStyle("-fx-text-fill: rgba(0, 245, 20, 0.6);");
+        }
     }
 }
