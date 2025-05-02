@@ -169,7 +169,7 @@ public class JavaFXController {
             startNewInput = false;
             operationJustPerformed = false;
 
-            // Reset the display type to "Input" when starting a new input
+            // Set the display type to "Input" as mainDisplay is now showing an input
             displayType.setText("Input");
             displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
         }
@@ -396,7 +396,7 @@ public class JavaFXController {
         pendingUnaryOperation = null;
         pendingOperationClosings = 0;
 
-        // Reset the display type to "Input" when starting a new input
+        // Set the display type to "Input" as mainDisplay is now showing an input
         displayType.setText("Input");
         displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
     }
@@ -419,6 +419,7 @@ public class JavaFXController {
     /**
      * Applies a unary operation (square, square root, reciprocal, negate) to the current value.
      * Converts percentage values to decimal before performing operations.
+     * Standard Calculator does not allow nesting of unary or binary operations as there isn't a way to close parantheses.
      * 
      * @param type The type of unary operation to apply
      */
@@ -435,11 +436,7 @@ public class JavaFXController {
             
             // Convert percentage to decimal if needed
             if (mainDisplay.getText().endsWith("%") && !type.equals("percent")) {
-                double value = parseDisplayValue(mainDisplay.getText());
-                String decimalStr = formatNumber(value);
-                mainDisplay.setText(decimalStr);
-                currentInput.setLength(0);
-                currentInput.append(decimalStr);
+                togglePercentDisplay();
             }
             
             // Get the value from the main display, handling percent signs
@@ -506,7 +503,7 @@ public class JavaFXController {
                 startNewInput = true;
                 operationJustPerformed = false; // Allow next digit input to replace display
                 
-                // Reset the display type to "Input" when starting a new input
+                // Set the display type to "Input" as mainDisplay is now showing an input
                 displayType.setText("Input");
                 displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
                 
@@ -531,7 +528,7 @@ public class JavaFXController {
                 startNewInput = true;
                 operationJustPerformed = false; // Allow next digit input to replace display
                 
-                // Reset the display type to "Input" when starting a new input
+                // Set the display type to "Input" as mainDisplay is now showing an input
                 displayType.setText("Input");
                 displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
                 
@@ -630,21 +627,6 @@ public class JavaFXController {
             currentInput.setLength(0);
             currentInput.append(formatted);
             
-            // Create a more descriptive history entry
-            if (!type.equals("percent")) {  // Don't add percent toggle to history
-                String historyEntry;
-                switch (type) {
-                    case "square" -> historyEntry = valueStr + "\u00B2 = " + formatted;
-                    case "sqrt" -> historyEntry = "sqrt(" + valueStr + ") = " + formatted;
-                    case "reciprocal" -> historyEntry = "1/(" + valueStr + ") = " + formatted;
-                    case "negate" -> historyEntry = "negate(" + valueStr + ") = " + formatted;
-                    default -> historyEntry = valueStr + " = " + formatted;
-                }
-                
-                // Add to history
-                historyList.add(0, historyEntry);
-            }
-            
             // Mark that we should start a new input next
             startNewInput = true;
             operationJustPerformed = true;
@@ -668,7 +650,7 @@ public class JavaFXController {
             startNewInput = false;
             operationJustPerformed = false;
 
-            // Reset the display type to "Input" when starting a new input
+            // Set the display type to "Input" as mainDisplay is now showing an input
             displayType.setText("Input");
             displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
         }

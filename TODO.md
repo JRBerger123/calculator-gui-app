@@ -15,6 +15,7 @@
 - [ ] Make sure that expressions fit within history and expressionDisplay
 - [ ] Scale button text with calculator size
 - [ ] Scale side panel with calculator size
+- [ ] Change Input and Result label to a colored border around mainDisplay
 
 ## Extra Features
 
