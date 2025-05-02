@@ -1,17 +1,17 @@
 package app;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
-import javafx.scene.Parent;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import javafx.fxml.FXMLLoader;
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -21,31 +21,125 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.Scene;
 
-
+/**
+ * JavaFXController class handles the user interface and logic for the calculator application.
+ * It manages the calculator's state, input handling, and expression evaluation using a JavaScript engine.
+ * The class is responsible for updating the UI components based on user interactions and calculations.
+ * It also provides functionality for memory operations, history tracking, and context menu management.
+ * 
+ * @author Brandon Berger,
+ * @version 1.0
+ * @since 2025.05.02
+ * @see <a href="https://github.com/JRBerger123/calculator-gui-app">GitHub Repository</a>
+ * @see <a href="https://github.com/JRBerger123">Brandon Berger's GitHub</a>
+ * 
+ */
 public class JavaFXController {
 
+    /**
+     * JavaFX UI components for the main display of the calculator.
+     */
     @FXML private Label mainDisplay;
-    @FXML private Label expressionDisplay;
-    @FXML private Label displayType;
-    @FXML private Button percentButton;
-    @FXML private Button menuButton;
-    @FXML private AnchorPane root;
-    @FXML private VBox contextMenu;
-    @FXML private VBox sidePanel;
-    @FXML private VBox calculatorRoot;
-    @FXML private Button equalsButton;
-    @FXML private Button historyButton;
-    @FXML private Button memoryButton;
-    @FXML private ListView<String> historyMemoryListView;
-    @FXML private Button mPlusButton;
 
+    /**
+     * JavaFX UI components for the expression display of the calculator.
+     */
+    @FXML private Label expressionDisplay;
+
+    /**
+     * JavaFX UI components for the display type label (Input/Result).
+     * This label indicates whether the current display is showing an input or a result.
+     * It is updated dynamically based on the calculator's state.
+     */
+    @FXML private Label displayType;
+
+    /**
+     * Button for clearing all entries in the calculator.
+     */
+    @FXML private Button percentButton;
+
+    /**
+     * Button for opening context menu for additional options.
+     * This button is used to toggle the visibility of the context menu.
+     * The context menu is hidden by default and can be shown by clicking this button.
+     */
+    @FXML private Button menuButton;
+
+    /**
+     * GUI element for the context menu.
+     * This menu provides additional options and settings for the calculator, such as changing themes or switching between calculator modes.
+     */
+    @FXML private VBox contextMenu;
+
+    /**
+     * The root layout of the calculator application.
+     * This is the main container for all UI components and is used to manage the layout and responsiveness of the calculator.
+     */
+    @FXML private AnchorPane root;
+
+    /**
+     * GUI element for the side panel of the calculator.
+     * This panel can be used to display additional information, such as history or memory values.
+     */
+    @FXML private VBox sidePanel;
+
+    /**
+     * The main calculator layout that contains the buttons and displays.
+     * This layout is used to organize the calculator's buttons and displays in a user-friendly manner.
+     * Required so that the calculator can expand dynamically vertically.
+     */
+    @FXML private VBox calculatorRoot;
+
+    /**
+     * Button for evaulating equations and showing results.
+     */
+    @FXML private Button equalsButton;
+
+    /**
+     * Button for setting the side panel to show list of saved values in history.
+     */
+    @FXML private Button historyButton;
+
+    /**
+     * Button for setting the side panel to show list of saved values in memory.
+     */
+    @FXML private Button memoryButton;
+
+    /**
+     * ListView for displaying the history or memory of calculations.
+     * Element that allows for the showing of history or memory list in a stack data structure.
+     */
+    @FXML private ListView<String> historyMemoryListView;
+
+    /**
+     * Flag to indicate if the calculator is in dark mode.
+     * This is used to toggle the theme of the calculator UI.
+     */
     private boolean darkMode = true;
+
+    /**
+     * List of history entries for the calculator.
+     * This is used to keep track of previous calculations and results.
+     * TODO: To be replaced with a more advanced data structure in the future.
+     */
     private final ObservableList<String> historyList = FXCollections.observableArrayList();
+
+    /**
+     * List of memory values for the calculator.
+     * This is used to store values that can be recalled later.
+     * TODO: To be replaced with a more advanced data structure in the future.
+     */
     private final ObservableList<String> memoryList = FXCollections.observableArrayList();
 
+    /**
+     * DecimalFormat for formatting numbers in decimal notation.
+     */
     private final DecimalFormat df = new DecimalFormat("#.##########");
+
+    /**
+     * DecimalFormat for scientific notation with 6 decimal places.
+     */
     private final DecimalFormat scientificDF = new DecimalFormat("0.######E0");
 
     /**
@@ -115,44 +209,6 @@ public class JavaFXController {
      * Sets up the JavaScript engine, initializes the calculator state, configures the UI, and sets up Key Event Handler.
      */
     @FXML
-    private void handleMemoryAdd(ActionEvent event){
-        memoryAdd();
-    }
-
-    @FXML
-    private void handleMemoryMinus(ActionEvent event){
-        memorySubtract();
-    }
-
-
-    @FXML
-    private void handleOpenBracket(ActionEvent event) {
-        appendToInput("(");
-    }
-
-    @FXML
-    private void handleCloseBracket(ActionEvent event) {
-        appendToInput(")");
-    }
-
-    @FXML
-    private void handleAbsoluteValue(ActionEvent event) {
-        // Append "abs(" so your normalizing logic can turn it into Math.abs(...)
-        appendToInput("abs(");
-    }
-
-
-    @FXML
-    private void handleEuler(ActionEvent event) {
-        appendToInput("e");
-    }
-
-    @FXML
-    private void handlePi(ActionEvent event) {
-        appendToInput("π");
-    }
-
-    @FXML
     public void initialize() {
         try {
             this.engine = new ScriptEngineManager().getEngineByName("graal.js");
@@ -190,6 +246,7 @@ public class JavaFXController {
 
             // Add clipboard functionality
             root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                // TODO: Test edge cases for copying values as input
                 // Handle Ctrl+C for copy
                 if (event.isControlDown() && event.getCode() == KeyCode.C) {
                     // Get the text to copy (from main display)
@@ -203,13 +260,12 @@ public class JavaFXController {
                     content.putString(textToCopy);
                     clipboard.setContent(content);
                     
-                    // Provide visual feedback (optional)
-                    // You could briefly change the display color or add a small notification
+                    // TODO: Provide visual feedback that copy occured
                     
                     event.consume();
                 }
 
-                // TODO: Test edge cases for copy/paste with non-numeric and operator content
+                // TODO: Test edge cases for pasting values as input
                 // Handle Ctrl+V for paste
                 if (event.isControlDown() && event.getCode() == KeyCode.V) {
                     // Get content from clipboard
@@ -230,6 +286,8 @@ public class JavaFXController {
                         }
                     }
                     
+                    // TODO: Provide visual feedback that paste occured
+
                     event.consume();
                 }
             });
@@ -269,6 +327,7 @@ public class JavaFXController {
                 sidePanel.setVisible(shouldShow);
                 adjustCalculatorLayout(shouldShow);
 
+                // Add listener to the scene width property to adjust the side panel visibility based on scene (window) width
                 newScene.widthProperty().addListener((obsW, oldW, newW) -> {
                     boolean showPanel = newW.doubleValue() > RESPONSIVE_THRESHOLD;
                     sidePanel.setVisible(showPanel);
@@ -337,7 +396,6 @@ public class JavaFXController {
 
             case "percentButton" -> togglePercentDisplay();
             case "squareButton" -> applyUnaryOperation("square");
-            case "cubesButton" -> applyUnaryOperation("cubes");
             case "squareRootButton" -> applyUnaryOperation("sqrt");
             case "reciprocalButton" -> applyUnaryOperation("reciprocal");
             case "negateButton" -> applyUnaryOperation("negate");
@@ -356,6 +414,7 @@ public class JavaFXController {
 
     /**
      * Handles key presses for keyboard input.
+     * Assumes keyboard layout is US-QWERTY.
      * Maps keys to calculator functions and performs the corresponding action.
      * Properly handles shift-modified keys for symbols like +, *, etc.
      * 
@@ -825,12 +884,6 @@ public class JavaFXController {
                     jsOperationPrefix = "Math.sqrt(";
                     jsOperationSuffix = ")";
                 }
-                case "cubes" -> {
-                    operationPrefix = "\u221A(";
-                    operationSuffix = ")";
-                    jsOperationPrefix = "Math.cubes(";
-                    jsOperationSuffix = ")";
-                }
                 case "reciprocal" -> {
                     operationPrefix = "1/(";
                     operationSuffix = ")";
@@ -1186,6 +1239,10 @@ public class JavaFXController {
         System.out.println("Layout swapping not supported yet");
     }
 
+    /**
+     * Toggles between light and dark theme for the calculator.
+     * Uses CSS class-based approach to switch themes defined in SCSS.
+     */
     @FXML
     private void handleThemeToggle() {
         Scene scene = root.getScene();
@@ -1200,28 +1257,58 @@ public class JavaFXController {
         }
         darkMode = !darkMode;
     }
+
+    /**
+     * Adds the current displayed value to memory.
+     * If the memory list is empty, initializes it with the current value.
+     */
     @FXML
     private void memoryAdd() {
-        double displayed = parseDisplayValue(mainDisplay.getText());
-        double mem = memoryList.isEmpty()
-                ? 0
-                : parseDisplayValue(memoryList.get(0));
-        double updated = mem + displayed;
-        String fmt = formatNumber(updated);
-        if (memoryList.isEmpty()) memoryList.add(0, fmt);
-        else                     memoryList.set(0, fmt);
+        try {
+            double displayed = parseDisplayValue(mainDisplay.getText());
+            double mem = memoryList.isEmpty() ? 0 : parseDisplayValue(memoryList.get(0));
+            double updated = mem + displayed;
+
+            String fmt = formatNumber(updated);
+            if (memoryList.isEmpty()) {
+                memoryList.add(0, fmt);
+            } else {
+                memoryList.set(0, fmt);
+            }           
+        } catch (Exception e) {
+            System.err.println("Error trying to add to memory: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Subtracts the current displayed value from memory.
+     * If the memory list is empty, initializes it with the negative of the current value.
+     */
+    @FXML
+    private void memorySubtract() {
+        try {
+            double displayed = parseDisplayValue(mainDisplay.getText());
+            double mem = memoryList.isEmpty() ? 0 : parseDisplayValue(memoryList.get(0));
+            double updated = mem - displayed;
+            String fmt = formatNumber(updated);
+            
+            if (memoryList.isEmpty()) { 
+                memoryList.add(0, fmt);
+            } else {
+                memoryList.set(0, fmt);
+            }
+        } catch (Exception e) {
+            System.err.println("Error trying to add to memory: " + e.getMessage());
+        }
     }
 
     @FXML
-    private void memorySubtract() {
-        double displayed = parseDisplayValue(mainDisplay.getText());
-        double mem = memoryList.isEmpty()
-                ? 0
-                : parseDisplayValue(memoryList.get(0));
-        double updated = mem - displayed;
-        String fmt = formatNumber(updated);
-        if (memoryList.isEmpty()) memoryList.add(0, fmt);
-        else                     memoryList.set(0, fmt);
+    private void handleMemoryAdd(ActionEvent event){
+        memoryAdd();
     }
 
+    @FXML
+    private void handleMemoryMinus(ActionEvent event){
+        memorySubtract();
+    }
 }

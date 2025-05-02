@@ -6,6 +6,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * CalculatorApp is the main class for the calculator application.
+ * It initializes the JavaFX application and loads the FXML layout.
+ * It also sets the minimum and default size for the application window.
+ * The application uses a CSS stylesheet for styling.
+ * 
+ * @author Brandon Berger,
+ * @version 1.0
+ * @since 2025.05.02
+ * @see <a href="https://github.com/JRBerger123/calculator-gui-app">GitHub Repository</a>
+ * @see <a href="https://github.com/JRBerger123">Brandon Berger's GitHub</a>
+ * 
+ */
 public class CalculatorApp extends Application {
 
     @Override
