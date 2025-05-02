@@ -5,7 +5,7 @@
 - [ ] Finish memory button logic (M+, M-)
 - [ ] Show memory and history in condensed view
 - [ ] Add clear all memory and history button
-- [ ] Only add to history when equals is pressed
+- [x] Only add to history when equals is pressed
 - [ ] Create custom button list for history and memory list
 
 ## Visual Changes
@@ -19,7 +19,7 @@
 
 ## Extra Features
 
-- [ ] Change text label above mainDisplay to show input versus result
+- [x] Change text label above mainDisplay to show input versus result
 - [ ] Implement Scientific Calculator
 - [ ] Create menu for switching to Scientific Calculator or other calculator types
 - [ ] Improve number formatting (e.g., thousands separator, trailing zeros, scientific notation)
@@ -34,6 +34,9 @@
 
 - [ ] Negative button breaks if used on any other value except the first value
 - [ ] Handle mathematical edge cases, such as dividing by 0
+- [ ] Equals does not update expressionDisplay if the previous expressionDisplay includes only a value and equals sign (e.g., 2 =, 4 =)
+- [ ] ExpressionDisplay does not clear when a new input starts after equals has been pressed
+- [ ] M+ and M- buttons are not implemented
 
 ## Other
 

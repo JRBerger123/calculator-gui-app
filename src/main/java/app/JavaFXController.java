@@ -14,6 +14,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
@@ -26,6 +28,7 @@ public class JavaFXController {
     @FXML private AnchorPane root;
     @FXML private VBox sidePanel;
     @FXML private VBox calculatorRoot;
+    @FXML private Button equalsButton;
     @FXML private Button historyButton;
     @FXML private Button memoryButton;
     @FXML private ListView<String> historyMemoryListView;
@@ -36,37 +39,71 @@ public class JavaFXController {
     private final DecimalFormat df = new DecimalFormat("#.##########");
     private final DecimalFormat scientificDF = new DecimalFormat("0.######E0");
 
-    // Full expression that shows in expressionDisplay
+    /**
+     * Full expression shown in expressionDisplay above the mainDisplay.
+     */
     private final StringBuilder expressionBuilder = new StringBuilder();
     
-    // Current input that shows in mainDisplay
+    /**
+     * Current input shown in mainDisplay
+     */
     private final StringBuilder currentInput = new StringBuilder();
 
-    // Keeps track of the actual JavaScript expression for evaluation
+    /**
+     * Keeps track of the actual JavaScript expression for evaluation.
+     * This is used in the background (not shown to the user) to keep the expression in syntax that JavaScript engine can understand.
+     */
     private final StringBuilder jsExpressionBuilder = new StringBuilder();
-    
-    // JavaScript engine for evaluating expressions
-    // This uses GraalVM JavaScript engine if available, otherwise falls back to generic JavaScript engine
+
+    /**
+     * JavaScript engine for evaluating expressions.
+     * This uses GraalVM JavaScript engine if available, otherwise falls back to generic JavaScript engine.
+     */
     private ScriptEngine engine;
     
-    // Tracks the state of the calculator
+    /**
+     * Flag to indicate if a new input is being started.
+     * This is used to determine if the current input in mainDisplay should be cleared when a new number is entered.
+     */
     private boolean startNewInput = true;
+
+    /**
+     * Flag to indicate if an operation was just performed.
+     */
     private boolean operationJustPerformed = false;
     
-    // Track pending unary operations. Allows for nested operations (e.g., sqrt(sqrt(4)))
+    /**
+     * Pending unary operation type. This is used to track the current unary operation being applied.
+     */
     private String pendingUnaryOperation = null;
+
+    /**
+     * List of pending operation closings. This is used to track the number of closing parentheses needed for unary operations.
+     */
     private int pendingOperationClosings = 0;
 
+    /**
+     * Threshold for responsive layout. If the window width exceeds this value, the side panel is shown.
+     * If the window width is less than this value, the side panel is hidden.
+     */
     private static final double RESPONSIVE_THRESHOLD = 555.0;
 
+    /**
+     * Initializes the JavaFX controller.
+     * Sets up the JavaScript engine, initializes the calculator state, configures the UI, and sets up Key Event Handler.
+     */
     @FXML
     public void initialize() {
         try {
             this.engine = new ScriptEngineManager().getEngineByName("graal.js");
+
+            // Checks if GraalVM JavaScript engine initialized sucessfully, if not, tries to fall back to generic JavaScript engine
+            // The generic JavaScript engine was removed in Java 15+, so this is a fallback for older versions
             if (this.engine == null) {
                 System.err.println("GraalVM JavaScript engine not found, trying generic JavaScript");
                 this.engine = new ScriptEngineManager().getEngineByName("JavaScript");
                 
+                // Checks if the generic JavaScript engine initialized successfully, if not, exits the application
                 if (this.engine == null) {
                     System.err.println("No JavaScript engine found! Application will exit.");
                     Platform.exit();
@@ -74,12 +111,30 @@ public class JavaFXController {
                 }
             }
             
-            System.out.println("JavaScript engine created successfully: " + engine.getClass().getName());
+            // Print the name of the JavaScript engine for debugging purposes
+            System.out.println("JavaScript engine created successfully: " + engine.getClass().getName() + "\n");
             
+            // Set text for the percent button is required as % is used as a special character in JavaFX and cannot be set directly in FXML
             percentButton.setText("%");
+
             resetCalculator();
+
+            // Calculator defaults to showing the history panel over the memory panel
             showHistoryPanel();
+
+            // Sets up the calculator layout to be responsive to window size changes, as sidePanel is hidden by default
             setupResponsiveLayout();
+
+            // Event handler for key presses
+            root.setOnKeyPressed(this::handleKeyPress);
+
+            // Required for Enter button to act as equals button
+            // Waits for the JavaFX application thread to be ready before setting focus
+            // Equivalent to setting the equals button tab order to highest priority
+            Platform.runLater(() -> {
+                equalsButton.requestFocus();
+                equalsButton.setDefaultButton(true);
+            });
         } catch (Exception e) {
             System.err.println("Error initializing JavaFXController: " + e.getMessage());
             Platform.exit();
@@ -160,6 +215,154 @@ public class JavaFXController {
             default -> System.err.println("Unhandled button ID: " + id);
         }
     }
+
+    /**
+     * Handles key presses for keyboard input.
+     * Maps keys to calculator functions and performs the corresponding action.
+     * Properly handles shift-modified keys for symbols like +, *, etc.
+     * 
+     * @param event The KeyEvent triggered by the key press
+     */
+    private void handleKeyPress(KeyEvent event) {
+        KeyCode code = event.getCode();
+        boolean shiftDown = event.isShiftDown();
+        
+        // Handle digit keys (not affected by shift)
+        if (code.isDigitKey() && !shiftDown) {
+            String name = code.toString(); // e.g., "DIGIT0", "NUMPAD3"
+            if (name.startsWith("DIGIT") || name.startsWith("NUMPAD")) {
+                String digit = name.replaceAll("[^0-9]", ""); // extract the digit
+                appendToInput(digit);
+                event.consume();
+                return;
+            }
+        }
+        
+        
+        // Handle keys that behave differently with shift
+        switch (code) {
+            case DIGIT8 -> {
+                if (shiftDown) {
+                    // * (asterisk) - multiply
+                    handleOperator("*");
+                    event.consume();
+                }
+            }
+            case EQUALS -> {
+                if (shiftDown) {
+                    // + (plus sign on equals key with shift)
+                    handleOperator("+");
+                    event.consume();
+                } else {
+                    // = (equals sign without shift)
+                    evaluateExpression();
+                    event.consume();
+                }
+            }
+            case PLUS -> {
+                // + (dedicated plus key)
+                handleOperator("+");
+                event.consume();
+            }
+            case MINUS -> {
+                // - (minus/hyphen)
+                handleOperator("-");
+                event.consume();
+            }
+            case SLASH -> {
+                // / (forward slash)
+                handleOperator("/");
+                event.consume();
+            }
+            case DIGIT5 -> {
+                if (shiftDown) {
+                    // % (percent sign, SHIFT+5)
+                    togglePercentDisplay();
+                    event.consume();
+                }
+            }
+            case DIGIT6 -> {
+                if (shiftDown) {
+                    // ^ (caret, SHIFT+6)
+                    // TODO: Handle exponentiation in Scientific mode
+                    event.consume();
+                }
+            }
+            case DIGIT9 -> {
+                if (shiftDown) {
+                    // ( (left parenthesis)
+                    // TODO: Handle parentheses in Scientific mode
+                    event.consume();
+                }
+            }
+            case DIGIT0 -> {
+                if (shiftDown) {
+                    // ) (right parenthesis)
+                    // TODO: Handle parentheses in Scientific mode
+                    event.consume();
+                }
+            }
+            case R -> {
+                // r/R key for reciprocal
+                applyUnaryOperation("reciprocal");
+                event.consume();
+            }
+            case S -> {
+                // s/S key for square
+                applyUnaryOperation("square");
+                event.consume();
+            }
+            case Q -> {
+                // q/Q key for square root
+                applyUnaryOperation("sqrt");
+                event.consume();
+            }
+            case ENTER -> {
+                // Enter key for equals
+                evaluateExpression();
+                event.consume();
+            }
+            case BACK_SPACE -> {
+                // Backspace for delete
+                backspace();
+                event.consume();
+            }
+            case DELETE -> {
+                // Delete key for clear entry
+                clearEntry();
+                event.consume();
+            }
+            case ESCAPE -> {
+                // Escape for clear all
+                clear();
+                event.consume();
+            }
+            case PERIOD, DECIMAL -> {
+                // Period/decimal point
+                appendToInput(".");
+                event.consume();
+            }
+            default -> {
+                // No action for unhandled keys
+            }
+        }
+        
+        // Process remaining text input for special characters
+        // This is needed because some keyboard layouts produce different character codes
+        String keyText = event.getText();
+        if (!keyText.isEmpty() && !event.isConsumed()) {
+            switch (keyText) {
+                case "+" -> { handleOperator("+"); event.consume(); }
+                case "-" -> { handleOperator("-"); event.consume(); }
+                case "*" -> { handleOperator("*"); event.consume(); }
+                case "/" -> { handleOperator("/"); event.consume(); }
+                case "=" -> { evaluateExpression(); event.consume(); }
+                case "%" -> { togglePercentDisplay(); event.consume(); }
+                case "." -> { appendToInput("."); event.consume(); }
+            }
+        }
+    }
+
 
     private void appendToInput(String value) {
         // If an operation was just performed or we're starting a new input,
