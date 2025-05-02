@@ -27,7 +27,9 @@ public class JavaFXController {
     @FXML private Label expressionDisplay;
     @FXML private Label displayType;
     @FXML private Button percentButton;
+    @FXML private Button menuButton;
     @FXML private AnchorPane root;
+    @FXML private VBox contextMenu;
     @FXML private VBox sidePanel;
     @FXML private VBox calculatorRoot;
     @FXML private Button equalsButton;
@@ -90,6 +92,12 @@ public class JavaFXController {
      * This is used to prevent continuous dividing of the value by 100 when the percent button is pressed multiple times.
      */
     private boolean hasBeenPercented = false;
+
+    /**
+     * Flag to indicate if the context menu is currently visible.
+     * This is used to toggle the visibility of the context menu when the menu button is clicked.
+     */
+    private boolean contextMenuVisible = false;
 
     /**
      * Threshold for responsive layout. If the window width exceeds this value, the side panel is shown.
@@ -180,6 +188,14 @@ public class JavaFXController {
                     }
                     
                     event.consume();
+                }
+            });
+
+            // Close the context menu if clicking elsewhere
+            root.setOnMouseClicked(event -> {
+                if (!contextMenu.isHover() && !menuButton.isHover()) {
+                    contextMenu.setVisible(false);
+                    contextMenuVisible = false;
                 }
             });
 
@@ -287,6 +303,8 @@ public class JavaFXController {
             case "mcButton" -> memoryList.clear();
             case "mrButton" -> recallMemory();
             case "msButton" -> memoryList.add(0, mainDisplay.getText());
+
+            case "menuButton" -> handleMenuToggle();
 
             default -> System.err.println("Unhandled button ID: " + id);
         }
@@ -1090,5 +1108,28 @@ public class JavaFXController {
         } else {
             return Double.parseDouble(displayValue);
         }
+    }
+
+    /**
+     * Handles the toggle of the context menu visibility.
+     * This method is called when the menu button is clicked.
+     */
+    @FXML
+    private void handleMenuToggle() {
+        contextMenuVisible = !contextMenuVisible;
+        contextMenu.setVisible(contextMenuVisible);
+    }
+
+    @FXML
+    private void handleScientificClick() {
+        System.out.println("Switching to Scientific Mode...");
+        handleMenuToggle();
+    }
+
+    @FXML
+    private void handleThemeToggle() {
+        System.out.println("Toggling Theme...");
+        contextMenu.setVisible(false);
+        handleMenuToggle();
     }
 }

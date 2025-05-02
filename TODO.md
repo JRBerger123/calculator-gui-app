@@ -23,7 +23,7 @@
 ## Extra Features
 
 - [x] Change text label above mainDisplay to show input versus result
-- [ ] Create menu for switching to Scientific Calculator or other calculator types
+- [x] Create menu for switching to Scientific Calculator or other calculator types
 - [ ] Implement new buttons that were added on the Scientific Calculator
 - [ ] Improve number formatting (e.g., thousands separator, trailing zeros, scientific notation)
 - [ ] Implement the ability to highlight a portion of the answer for copying or just because

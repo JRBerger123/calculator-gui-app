@@ -126,4 +126,22 @@
         </VBox>
     </VBox>
 
+    <!-- Context Menu: Top-Left, Initially Hidden -->
+    <VBox fx:id="contextMenu"
+          visible="false"
+          AnchorPane.topAnchor="50.0"
+          AnchorPane.leftAnchor="10.0"
+          style="-fx-background-color: #333; -fx-padding: 10; -fx-spacing: 5; -fx-border-color: #aaa; -fx-border-radius: 5;">
+
+        <Label text="Scientific Calculator"
+               textFill="white"
+               onMouseClicked="#handleScientificClick"
+               style="-fx-cursor: hand;" />
+
+        <Label text="Toggle Dark/Light Mode"
+               textFill="white"
+               onMouseClicked="#handleThemeToggle"
+               style="-fx-cursor: hand;" />
+    </VBox>
+
 </AnchorPane>
