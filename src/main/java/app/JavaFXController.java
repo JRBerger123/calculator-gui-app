@@ -1,6 +1,7 @@
 package app;
 
 import java.text.DecimalFormat;
+import java.util.Optional;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -12,7 +13,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.Clipboard;
@@ -21,6 +24,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Tooltip;
 
 /**
  * JavaFXController class handles the user interface and logic for the calculator application.
@@ -36,6 +40,12 @@ import javafx.scene.layout.VBox;
  * 
  */
 public class JavaFXController {
+
+    /**
+     * The root layout of the calculator application.
+     * This is the main container for all UI components and is used to manage the layout and responsiveness of the calculator.
+     */
+    @FXML private AnchorPane root;
 
     /**
      * JavaFX UI components for the main display of the calculator.
@@ -73,12 +83,6 @@ public class JavaFXController {
     @FXML private VBox contextMenu;
 
     /**
-     * The root layout of the calculator application.
-     * This is the main container for all UI components and is used to manage the layout and responsiveness of the calculator.
-     */
-    @FXML private AnchorPane root;
-
-    /**
      * GUI element for the side panel of the calculator.
      * This panel can be used to display additional information, such as history or memory values.
      */
@@ -111,6 +115,12 @@ public class JavaFXController {
      * Element that allows for the showing of history or memory list in a stack data structure.
      */
     @FXML private ListView<String> sidePanelListView;
+
+    /**
+     * Tooltip for the clear history/memory button.
+     * This tooltip provides additional information about the button's function when hovered over.
+     */
+    @FXML private Tooltip clearTooltip;
 
     /**
      * Flag to indicate if the calculator is in dark mode.
@@ -689,7 +699,7 @@ public class JavaFXController {
 
                     Object result = engine.eval(tempExpression);
                     String resultStr = formatNumber(Double.parseDouble(result.toString()));
-                    
+
                     mainDisplay.setText(resultStr);
                     
                     // Store the result as the current input for the next operation
@@ -1337,6 +1347,11 @@ public class JavaFXController {
         memorySubtract();
     }
 
+    /**
+     * Sets the display type label to indicate whether the main display is showing an input or a result.
+     * This is used to provide visual feedback to the user about the current state of the calculator.
+     * Used in percent toggle.
+     */
     private void setDisplayTypeLabel(boolean isInput) {
         if (isInput) {
             // Update the display type to "Input" to indicate the main display shows an input
@@ -1347,5 +1362,37 @@ public class JavaFXController {
             displayTypeLabel.setText("Result");
             displayTypeLabel.setStyle("-fx-text-fill: rgba(0, 245, 20, 0.6);");
         }
+    }
+
+    /**
+     * Handles the clear button action for the history/memory panel.
+     * Clears either history list or memory list based on which panel is currently active.
+     * Updates the tooltip to reflect the current context.
+     */
+    @FXML
+    private void handleClearHistoryMemory() {
+        // Get the current panel state
+        boolean isHistoryActive = sidePanelListView.getItems() == historyList;
+
+        if (isHistoryActive) {
+            // Clear history list
+            if (!historyList.isEmpty()) {
+                historyList.clear();
+            }
+        } else {
+            // Clear memory list
+            if (!memoryList.isEmpty()) {
+                memoryList.clear();
+            }
+        }
+    }
+
+    /**
+     * Updates the clear button tooltip based on the active panel.
+     * Call this method when switching between history and memory panels.
+     */
+    private void updateClearButtonTooltip() {
+        boolean isHistoryActive = sidePanelListView.getItems() == historyList;
+        clearTooltip.setText(isHistoryActive ? "Clear History" : "Clear Memory");
     }
 }

@@ -122,7 +122,27 @@
 
         <!-- History and Memory Panel -->
         <VBox fx:id="historyMemoryPanel" styleClass="historyMemory-panel" VBox.vgrow="ALWAYS">
+            <!-- List view that takes up most of the space -->
             <ListView fx:id="sidePanelListView" VBox.vgrow="ALWAYS"/>
+            
+            <!-- Button container aligned to the right -->
+            <HBox alignment="CENTER_RIGHT" spacing="5" styleClass="panel-actions">
+                <Button fx:id="clearButton" onAction="#handleClearHistoryMemory" 
+                        styleClass="icon-button" maxWidth="30" maxHeight="30" 
+                        minWidth="30" minHeight="30">
+                    <graphic>
+                        <javafx.scene.shape.SVGPath fill="white" scaleX="1" scaleY="1">
+                            <content>M4 2L5 3H19L20 2H23V4H1V2H4ZM3 6H21L20 22H4L3 6ZM9 10V18H11V10H9ZM13 10V18H15V10H13Z</content>
+                        </javafx.scene.shape.SVGPath>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip fx:id="clearTooltip" text="Clear"/>
+                    </tooltip>
+                </Button>
+                <padding>
+                    <Insets top="5" right="5" bottom="5" left="5"/>
+                </padding>
+            </HBox>
         </VBox>
     </VBox>
 

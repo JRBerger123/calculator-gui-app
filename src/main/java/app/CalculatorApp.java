@@ -34,7 +34,7 @@ public class CalculatorApp extends Application {
 
             primaryStage.setScene(scene);
 
-            primaryStage.setMinHeight(480);
+            primaryStage.setMinHeight(520);
             primaryStage.setMinWidth(320);
 
             primaryStage.show();

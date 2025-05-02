@@ -11,7 +11,7 @@
 ## Visual Changes
 
 - [x] Add dark/light mode toggle
-- [ ] Change minimum height so that all buttons are always shown
+- [x] Change minimum height so that all buttons are always shown
 - [ ] Make sure that expressions fit within history and expressionDisplay
 - [ ] Scale all text with calculator size
 - [ ] Scale side panel with calculator size
