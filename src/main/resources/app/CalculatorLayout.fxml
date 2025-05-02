@@ -37,7 +37,10 @@
         <!-- Calculator Display -->
         <VBox styleClass="display-container">
             <Label fx:id="expressionDisplay" styleClass="expression-display" maxWidth="Infinity" />
-            <Label fx:id="input" text="0" styleClass="calculator-display" maxWidth="Infinity" />
+            <VBox StyleClass="main-display" maxWidth="Infinity" VBox.vgrow="ALWAYS">
+                <Label fx:id="displayType" text="Input" styleClass="display-type" maxWidth="Infinity" />
+                <Label fx:id="mainDisplay" text="0" styleClass="calculator-display" maxWidth="Infinity" />
+            </VBox>
         </VBox>
 
         <!-- Buttons Grid -->
@@ -45,60 +48,62 @@
 
             <!-- Row: Memory Functions -->
             <HBox spacing="5" VBox.vgrow="ALWAYS">
-                <Button fx:id="mcButton" onAction="#handleMemoryClear" text="MC" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="mrButton" onAction="#handleMemoryRecall" text="MR" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="mPlusButton" onAction="#handleMemoryAdd" text="M+" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="mMinusButton" onAction="#handleMemorySubtract" text="M-" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="msButton"  onAction="#handleMemorySave" text="MS" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="mcButton" onAction="#handleLeftClick" text="MC" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="mrButton" onAction="#handleLeftClick" text="MR" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="mPlusButton" onAction="#handleLeftClick" text="M+" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="mMinusButton" onAction="#handleLeftClick" text="M-" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="msButton" onAction="#handleLeftClick" text="MS" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             </HBox>
 
             <!-- Row: Clear Functions -->
             <HBox spacing="5" VBox.vgrow="ALWAYS">
-                <Button onAction="#handleLeftClick" fx:id="percentButton" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS"/>
-                <Button onAction="#handleLeftClick" text="CE" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS"/>
-                <Button onAction="#handleLeftClick" text="C" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="backspaceButton"  onAction="#handleBackspace" text="⌫" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS"/>
+                <!-- The percentButton text is intentionally left blank because % character cannot be used in FXML -->
+                <Button fx:id="percentButton" onAction="#handleLeftClick" text="" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="ceButton" onAction="#handleLeftClick" text="CE" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="cButton" onAction="#handleLeftClick" text="C" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="backspaceButton" onAction="#handleLeftClick" text="⌫" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             </HBox>
 
             <!-- Row: Special Functions -->
             <HBox spacing="5" VBox.vgrow="ALWAYS">
-                <Button fx:id="reciprocal" onAction="#handleReciprocal" text="1/x" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="squares" onAction="#handleSquares" text="x²" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="squareRoot" onAction="#handleSquareRoots" text="√" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" />
-                <Button onAction="#handleLeftClick" text="/" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" />
+                <Button fx:id="reciprocalButton" onAction="#handleLeftClick" text="1/x" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="squareButton" onAction="#handleLeftClick" text="x²" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="squareRootButton" onAction="#handleLeftClick" text="√" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="divideButton" onAction="#handleLeftClick" text="/" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             </HBox>
 
             <!-- Row 1 -->
             <HBox spacing="5" VBox.vgrow="ALWAYS">
-                <Button onAction="#handleLeftClick" text="7" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS"/>
-                <Button onAction="#handleLeftClick" text="8" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS"/>
-                <Button onAction="#handleLeftClick" text="9" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
-                <Button onAction="#handleLeftClick" text="x" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" />
+                <Button fx:id="sevenButton" onAction="#handleLeftClick" text="7" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="eightButton" onAction="#handleLeftClick" text="8" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="nineButton" onAction="#handleLeftClick" text="9" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="multiplyButton" onAction="#handleLeftClick" text="x" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             </HBox>
 
             <!-- Row 2 -->
             <HBox spacing="5" VBox.vgrow="ALWAYS">
-                <Button onAction="#handleLeftClick" text="4" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
-                <Button onAction="#handleLeftClick" text="5" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
-                <Button onAction="#handleLeftClick" text="6" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
-                <Button onAction="#handleLeftClick" text="-" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" />
+                <Button fx:id="fourButton" onAction="#handleLeftClick" text="4" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="fiveButton" onAction="#handleLeftClick" text="5" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="sixButton" onAction="#handleLeftClick" text="6" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="minusButton" onAction="#handleLeftClick" text="-" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             </HBox>
 
             <!-- Row 3 -->
             <HBox spacing="5" VBox.vgrow="ALWAYS">
-                <Button onAction="#handleLeftClick" text="1" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
-                <Button onAction="#handleLeftClick" text="2" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS"/>
-                <Button onAction="#handleLeftClick" text="3" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS"/>
-                <Button onAction="#handleLeftClick" text="+" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="oneButton" onAction="#handleLeftClick" text="1" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="twoButton" onAction="#handleLeftClick" text="2" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="threeButton" onAction="#handleLeftClick" text="3" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="plusButton" onAction="#handleLeftClick" text="+" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             </HBox>
 
             <!-- Row 4 -->
             <HBox spacing="5" VBox.vgrow="ALWAYS">
-                <Button onAction="#handleLeftClick" text="(-)" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
-                <Button onAction="#handleLeftClick" text="0" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
-                <Button onAction="#handleLeftClick" text="." styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS"/>
-                <Button onAction="#handleLeftClick" text="=" styleClass="calculator-button, equals" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="negateButton" onAction="#handleLeftClick" text="(-)" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="zeroButton" onAction="#handleLeftClick" text="0" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="decimalButton" onAction="#handleLeftClick" text="." styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="equalsButton" onAction="#handleLeftClick" text="=" styleClass="calculator-button, equals" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             </HBox>
+
         </VBox>
     </VBox>
 

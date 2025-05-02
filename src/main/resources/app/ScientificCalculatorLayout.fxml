@@ -1,1 +1,138 @@
-// TODO: Create a layout for the Scientific Calculator
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane fx:id="root"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="app.JavaFXController"
+            prefHeight="600.0" prefWidth="400.0">
+
+    <VBox  fx:id="calculatorRoot"
+           AnchorPane.topAnchor="0.0"
+           AnchorPane.leftAnchor="0.0"
+           AnchorPane.bottomAnchor="0.0"
+           AnchorPane.rightAnchor="350.0"
+           styleClass="calculator-root">
+
+        <HBox styleClass="settings-container" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+            <!-- Menu Button-->
+            <Button fx:id="menuButton" onAction="#handleLeftClick" styleClass="menu-button" maxWidth="Infinity">
+                <graphic>
+                    <javafx.scene.shape.SVGPath fill="white" scaleX="1" scaleY="1">
+                        <content>M0 0h24v4H0V0zm0 7h24v4H0V7zm0 7h24v4H0v-4z</content>
+                    </javafx.scene.shape.SVGPath>
+                </graphic>
+            </Button>
+
+
+            <!-- Calculator Type -->
+            <Label text="Standard" styleClass="calculator-type" maxWidth="Infinity"/>
+
+        </HBox>
+
+        <!-- Calculator Display -->
+        <VBox styleClass="display-container">
+            <Label fx:id="expressionDisplay" styleClass="expression-display" maxWidth="Infinity" />
+            <Label fx:id="input" text="0" styleClass="calculator-display" maxWidth="Infinity" />
+        </VBox>
+
+        <!-- Buttons Grid -->
+        <VBox spacing="5" styleClass="button-container" maxWidth="Infinity" maxHeight="Infinity" VBox.vgrow="ALWAYS" >
+
+            <!-- Row: Memory Functions -->
+            <HBox spacing="5" VBox.vgrow="ALWAYS">
+                <Button fx:id="mcButton" onAction="#handleMemoryClear" text="MC" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="mrButton" onAction="#handleMemoryRecall" text="MR" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="mPlusButton" onAction="#handleMemoryAdd" text="M+" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="mMinusButton" onAction="#handleMemorySubtract" text="M-" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="msButton"  onAction="#handleMemorySave" text="MS" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- Row: Clear Functions -->
+            <HBox spacing="5" VBox.vgrow="ALWAYS">
+                <Button fx:id="value" onAction="#handleAbsoluteValue" text="2nd" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleLeftClick" text= "π" fx:id="pi" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleLeftClick" fx:id="e" text="e" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleLeftClick" text="CE" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="backspaceButton"  onAction="#handleBackspace" text="⌫" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- Row: Special Functions -->
+            <HBox spacing="5" VBox.vgrow="ALWAYS">
+                <Button fx:id="cubes" onAction="#handlecubes"  styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="reciprocal" onAction="#handleReciprocal" text="1/x" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="absoluteValue" onAction="#handleAbsoluteValue" text="|x|" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS"/>
+                <Button  onAction="#handleAbsoluteValue" text="exp" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleSquares" text="mod" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- Row 1 -->
+            <HBox spacing="5" VBox.vgrow="ALWAYS">
+                <Button fx:id="cuberoot" onAction="#handleLeftClick"  styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS"/>
+                <Button  onAction="#handleLeftClick" text="(" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleLeftClick" text=")" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleLeftClick" text="n!" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleLeftClick" text="/" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" />
+            </HBox>
+
+            <!-- Row 2 -->
+            <HBox spacing="5" VBox.vgrow="ALWAYS">
+                <Button fx:id="yrootx" onAction="#handleLeftClick" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleLeftClick" text="7" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleLeftClick" text="8" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleLeftClick" text="9" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleLeftClick" text="x" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS" />
+            </HBox>
+
+            <!-- Row 3 -->
+            <HBox spacing="5" VBox.vgrow="ALWAYS">
+                <Button fx:id="twoexponentx" onAction="#handleLeftClick"  styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleLeftClick" text="4" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleLeftClick" text="5" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleLeftClick" text="6" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleLeftClick" text="-" styleClass="calculator-button, secondary-button" HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- Row 4 -->
+            <HBox spacing="5" VBox.vgrow="ALWAYS">
+                <Button fx:id="logxofy" onAction="#handleLeftClick" text="logxy" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleLeftClick" text="1" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleLeftClick" text="2" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleLeftClick" text="3" styleClass="calculator-button, equals" HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleLeftClick" text="+" styleClass="calculator-button, equals" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <!-- Row 5 -->
+            <HBox spacing="5" VBox.vgrow="ALWAYS">
+                <Button fx:id="eofx" onAction="#handleLeftClick" text="eofx" styleClass="calculator-button, equals" HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleLeftClick" text="(-)" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleLeftClick" text="0" styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleLeftClick" text="." styleClass="calculator-button, primary-button" HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleLeftClick" text="=" styleClass="calculator-button, equals" HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+    <VBox fx:id="sidePanel"
+          prefWidth="245.0"
+          maxWidth="350.0"
+          AnchorPane.topAnchor="0.0"
+          AnchorPane.rightAnchor="0.0"
+          AnchorPane.bottomAnchor="0.0"
+          styleClass="side-panel">
+        <!-- Tab buttons -->
+        <HBox spacing="5" styleClass="tab-buttons">
+            <Button fx:id="historyButton" text="History" onAction="#handleLeftClick" styleClass="tab-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button fx:id="memoryButton" text="Memory" onAction="#handleLeftClick" styleClass="tab-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+        </HBox>
+
+        <!-- History and Memory Panel -->
+        <VBox fx:id="historyMemoryPanel" styleClass="historyMemory-panel" VBox.vgrow="ALWAYS">
+            <ListView fx:id="historyMemoryListView" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </VBox>
+
+</AnchorPane>

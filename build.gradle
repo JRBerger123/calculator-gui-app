@@ -8,8 +8,11 @@ repositories {
 }
 
 dependencies {
-    // No additional dependencies unless you need extra libraries
+    implementation 'org.graalvm.js:js:22.3.1'
+    implementation 'org.graalvm.js:js-scriptengine:22.3.1'
 }
+
+
 
 java {
     toolchain {

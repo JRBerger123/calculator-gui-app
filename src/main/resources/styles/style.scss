@@ -12,7 +12,7 @@
         .menu-button {
             -fx-background-color: $calculator-color;
             -fx-text-fill: $primary-text-color;
-            -fx-font-size: 16px;
+            -fx-font-size: 14px;
             -fx-padding: 8px;
             -fx-background-radius: 5px;
         }
@@ -20,8 +20,8 @@
         .calculator-type {
             -fx-text-fill: $primary-text-color;
             -fx-font-size: 18px;
-            -fx-padding: 6px 8px;
-            -fx-alignment: center;
+            -fx-padding: 5px 8px;
+            -fx-font-weight: bold;
         }
     }
 
@@ -29,21 +29,30 @@
         -fx-padding: 10px;
         -fx-spacing: 5px;
 
-        .calculator-display {
-            -fx-font-size: 32px;
-            -fx-background-color: $display-color;
-            -fx-text-fill: $primary-text-color;
-            -fx-alignment: center-right;
-            -fx-pref-height: 60px;
-            -fx-padding: 10px;
-        }
-    
         .expression-display {
             -fx-font-size: 18px;
             -fx-background-color: $display-color;
             -fx-text-fill: $primary-text-color;
             -fx-alignment: center-right;
             -fx-padding: 5px 10px;
+        }
+
+        .main-display {
+            .display-type {
+                -fx-font-size: 12px;
+                -fx-text-fill: rgba(229, 245, 0, 0.603);
+                -fx-font-weight: bold;
+                -fx-alignment: center-right;
+            }
+
+            .calculator-display {
+                -fx-font-size: 32px;
+                -fx-background-color: $display-color;
+                -fx-text-fill: $primary-text-color;
+                -fx-alignment: center-right;
+                -fx-pref-height: 60px;
+                -fx-padding: 6px 10px 10px 10px;
+            }
         }
     }
 
@@ -92,7 +101,7 @@
     }
 
     .memory-button {
-        -fx-background-color: rgba(0, 0, 0, 0);
+        -fx-background-color: rgba(0, 0, 0, 0); // transparent background
         -fx-text-fill: $primary-text-color;
         -fx-font-size: 16px;
         
@@ -106,15 +115,15 @@
     }
 
     .equals {
-        -fx-background-color: rgb(225, 131, 217);
-        -fx-text-fill: rgb(0, 0, 0);
+        -fx-background-color: $tertiary-button-color;
+        -fx-text-fill: $secondary-text-color;
 
         &:hover {
-            -fx-background-color: rgb(205, 120, 199);
+            -fx-background-color: $tertiary-hover-color;
         }
 
         &:pressed {
-            -fx-background-color: rgb(154, 90, 149);
+            -fx-background-color: $tertiary-pressed-color;
         }
     }
 }

@@ -9,27 +9,19 @@
 .calculator-root .settings-container .menu-button {
   -fx-background-color: rgb(62, 62, 62);
   -fx-text-fill: white;
-  -fx-font-size: 16px;
+  -fx-font-size: 14px;
   -fx-padding: 8px;
   -fx-background-radius: 5px;
 }
 .calculator-root .settings-container .calculator-type {
   -fx-text-fill: white;
   -fx-font-size: 18px;
-  -fx-padding: 6px 8px;
-  -fx-alignment: center;
+  -fx-padding: 5px 8px;
+  -fx-font-weight: bold;
 }
 .calculator-root .display-container {
   -fx-padding: 10px;
   -fx-spacing: 5px;
-}
-.calculator-root .display-container .calculator-display {
-  -fx-font-size: 32px;
-  -fx-background-color: rgba(0, 0, 0, 0.5);
-  -fx-text-fill: white;
-  -fx-alignment: center-right;
-  -fx-pref-height: 60px;
-  -fx-padding: 10px;
 }
 .calculator-root .display-container .expression-display {
   -fx-font-size: 18px;
@@ -37,6 +29,20 @@
   -fx-text-fill: white;
   -fx-alignment: center-right;
   -fx-padding: 5px 10px;
+}
+.calculator-root .display-container .main-display .display-type {
+  -fx-font-size: 12px;
+  -fx-text-fill: rgba(229, 245, 0, 0.603);
+  -fx-font-weight: bold;
+  -fx-alignment: center-right;
+}
+.calculator-root .display-container .main-display .calculator-display {
+  -fx-font-size: 32px;
+  -fx-background-color: rgba(0, 0, 0, 0.5);
+  -fx-text-fill: white;
+  -fx-alignment: center-right;
+  -fx-pref-height: 60px;
+  -fx-padding: 6px 10px 10px 10px;
 }
 .calculator-root .button-container {
   -fx-padding: 10px;
@@ -90,10 +96,10 @@
   -fx-text-fill: rgb(0, 0, 0);
 }
 .calculator-root .equals:hover {
-  -fx-background-color: rgb(205, 120, 199);
+  -fx-background-color: rgb(154, 90, 149);
 }
 .calculator-root .equals:pressed {
-  -fx-background-color: rgb(154, 90, 149);
+  -fx-background-color: rgb(177, 54, 164);
 }
 
 .side-panel {
