@@ -14,6 +14,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -128,6 +130,52 @@ public class JavaFXController {
             // Event handler for key presses
             root.setOnKeyPressed(this::handleKeyPress);
 
+            // Add clipboard functionality
+            root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                // Handle Ctrl+C for copy
+                if (event.isControlDown() && event.getCode() == KeyCode.C) {
+                    // Get the text to copy (from main display)
+                    String textToCopy = mainDisplay.getText();
+                    
+                    // Get system clipboard
+                    final Clipboard clipboard = Clipboard.getSystemClipboard();
+                    final ClipboardContent content = new ClipboardContent();
+                    
+                    // Set clipboard content
+                    content.putString(textToCopy);
+                    clipboard.setContent(content);
+                    
+                    // Provide visual feedback (optional)
+                    // You could briefly change the display color or add a small notification
+                    
+                    event.consume();
+                }
+
+                // TODO: Test edge cases for copy/paste with non-numeric and operator content
+                // Handle Ctrl+V for paste
+                if (event.isControlDown() && event.getCode() == KeyCode.V) {
+                    // Get content from clipboard
+                    final Clipboard clipboard = Clipboard.getSystemClipboard();
+                    String clipboardText = clipboard.getString();
+                    
+                    // Validate the clipboard content
+                    if (clipboardText != null && isValidCalculatorInput(clipboardText)) {
+                        // For valid numeric content, append to current input
+                        for (char c : clipboardText.toCharArray()) {
+                            // Process each character as if it were typed
+                            if (Character.isDigit(c) || c == '.') {
+                                appendToInput(String.valueOf(c));
+                            } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+                                handleOperator(String.valueOf(c));
+                            }
+                            // Ignore other characters
+                        }
+                    }
+                    
+                    event.consume();
+                }
+            });
+
             // Required for Enter button to act as equals button
             // Waits for the JavaFX application thread to be ready before setting focus
             // Equivalent to setting the equals button tab order to highest priority
@@ -141,6 +189,10 @@ public class JavaFXController {
         }
     }
 
+    /**
+     * Sets up the responsive layout for the calculator.
+     * If the window width exceeds the threshold, the side panel is shown.
+     */
     private void setupResponsiveLayout() {
         sidePanel.managedProperty().bind(sidePanel.visibleProperty());
         sidePanel.setVisible(false);
@@ -160,8 +212,25 @@ public class JavaFXController {
         });
     }
 
+    /**
+     * Adjusts the layout of the calculator based on whether the side panel should be visible or not.
+     * @param sidePanelVisible True if the side panel should be visible, false otherwise.
+     */
     private void adjustCalculatorLayout(boolean sidePanelVisible) {
+        // Sets the exact width of the side panel when visible versus hidden
         AnchorPane.setRightAnchor(calculatorRoot, sidePanelVisible ? 245.0 : 0.0);
+    }
+
+    /**
+     * Validates if the given string is valid calculator input.
+     * Accepts numeric values, decimal points, and basic operators.
+     * 
+     * @param input The string to validate
+     * @return true if the input is valid for the calculator, false otherwise
+     */
+    private boolean isValidCalculatorInput(String input) {
+        // Allow only digits, decimal points, and basic operators
+        return input.matches("[0-9.+\\-*/\\s]*");
     }
 
     /**
@@ -363,7 +432,10 @@ public class JavaFXController {
         }
     }
 
-
+    /**
+     * Appends a value to the current input in the main display.
+     * @param value The value to append (e.g., a digit or decimal point)
+     */
     private void appendToInput(String value) {
         // If an operation was just performed or we're starting a new input,
         // clear the current input
@@ -584,10 +656,17 @@ public class JavaFXController {
         }
     }
 
+    /**
+     * Clears the calculator state and resets the displays.
+     * Alias for resetCalculator() method.
+     */
     private void clear() {
         resetCalculator();
     }
     
+    /**
+     * Resets the calculator state and clears all displays.
+     */
     private void resetCalculator() {
         expressionBuilder.setLength(0);
         jsExpressionBuilder.setLength(0);
@@ -604,6 +683,9 @@ public class JavaFXController {
         displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
     }
 
+    /**
+     * Clears only the current entry/input in the calculator.
+     */
     private void clearEntry() {
         // Clear only the current entry/input
         currentInput.setLength(0);
@@ -611,6 +693,10 @@ public class JavaFXController {
         startNewInput = true;
     }
 
+    /**
+     * Allows the user to delete the last character of the current input and updates mainDisplay.
+     * Only allows backspace on the current input, not on results.
+     */
     private void backspace() {
         // Only allow backspace on the current input, not on results
         if (!startNewInput && !operationJustPerformed && currentInput.length() > 0) {
@@ -840,6 +926,10 @@ public class JavaFXController {
         }
     }
 
+    /**
+     * Recalls the first value from memory and updates the main display.
+     * If the memory list is empty, does nothing.
+     */
     private void recallMemory() {
         if (!memoryList.isEmpty()) {
             String memoryValue = memoryList.get(0);
@@ -859,18 +949,25 @@ public class JavaFXController {
         }
     }
 
+    /**
+     * Sets the list in the side panel to the history list and updates the button styles to indicate the active list.
+     */
     private void showHistoryPanel() {
         historyMemoryListView.setItems(historyList);
         historyButton.setStyle("-fx-background-color: #27c0c5");
         memoryButton.setStyle("-fx-background-color: #bdbdbd");
     }
 
+    /**
+     * Sets the list in the side panel to the memory list and updates the button styles to indicate the active list.
+     */
     private void showMemoryPanel() {
         historyMemoryListView.setItems(memoryList);
         historyButton.setStyle("-fx-background-color: #bdbdbd");
         memoryButton.setStyle("-fx-background-color: #27c0c5");
     }
 
+    // TODO: Test edge cases for formatting numbers
     /**
      * Formats a double value, converting it to an integer if it's sufficiently close to an integer.
      * This handles cases like sqrt(2)^2 where the result should be exactly 2 but might be 2.0000000000001
