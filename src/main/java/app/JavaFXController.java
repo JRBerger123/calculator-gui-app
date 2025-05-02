@@ -21,6 +21,7 @@ public class JavaFXController {
 
     @FXML private Label mainDisplay;
     @FXML private Label expressionDisplay;
+    @FXML private Label displayType;
     @FXML private Button percentButton;
     @FXML private AnchorPane root;
     @FXML private VBox sidePanel;
@@ -42,15 +43,17 @@ public class JavaFXController {
     private final StringBuilder currentInput = new StringBuilder();
 
     // Keeps track of the actual JavaScript expression for evaluation
-    private StringBuilder jsExpressionBuilder = new StringBuilder();
+    private final StringBuilder jsExpressionBuilder = new StringBuilder();
     
+    // JavaScript engine for evaluating expressions
+    // This uses GraalVM JavaScript engine if available, otherwise falls back to generic JavaScript engine
     private ScriptEngine engine;
     
     // Tracks the state of the calculator
     private boolean startNewInput = true;
     private boolean operationJustPerformed = false;
     
-    // Track pending unary operations
+    // Track pending unary operations. Allows for nested operations (e.g., sqrt(sqrt(4)))
     private String pendingUnaryOperation = null;
     private int pendingOperationClosings = 0;
 
@@ -165,6 +168,10 @@ public class JavaFXController {
             currentInput.setLength(0);
             startNewInput = false;
             operationJustPerformed = false;
+
+            // Reset the display type to "Input" when starting a new input
+            displayType.setText("Input");
+            displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
         }
         
         // Handle special case for decimal point
@@ -247,6 +254,10 @@ public class JavaFXController {
         
         // Mark that an operation was just performed
         operationJustPerformed = true;
+
+        // Update the display type to "Result" to indicate the main display shows a result
+        displayType.setText("Result");
+        displayType.setStyle("-fx-text-fill: rgba(0, 255, 0, 0.6);");
     }
 
     /**
@@ -257,8 +268,9 @@ public class JavaFXController {
         // Only evaluate if there's something to evaluate
         if (jsExpressionBuilder.length() > 0) {
             try {
-                // Create a temporary expression without the trailing operator
                 String tempExpression = jsExpressionBuilder.toString();
+
+                // Create a temporary expression without the trailing operator
                 if (tempExpression.endsWith("+") || tempExpression.endsWith("-") || 
                     tempExpression.endsWith("*") || tempExpression.endsWith("/")) {
                     tempExpression = tempExpression.substring(0, tempExpression.length() - 1);
@@ -273,6 +285,10 @@ public class JavaFXController {
                     // Store the result as the current input for the next operation
                     currentInput.setLength(0);
                     currentInput.append(resultStr);
+
+                    // Update the display type to "Result" to indicate the main display shows a result
+                    displayType.setText("Result");
+                    displayType.setStyle("-fx-text-fill: rgba(0, 255, 0, 0.6);");
                 }
             } catch (ScriptException | NumberFormatException e) {
                 // If there's an error, don't update the display
@@ -343,6 +359,10 @@ public class JavaFXController {
                 if (!expressionDisplay.getText().endsWith(" =")) {
                     expressionDisplay.setText(displayExpressionStr + " =");
                 }
+
+                // Update the display type to "Result" to indicate the main display shows a result
+                displayType.setText("Result");
+                displayType.setStyle("-fx-text-fill: rgba(0, 255, 0, 0.6);");
                 
                 // Reset state
                 expressionBuilder.setLength(0);
@@ -361,49 +381,6 @@ public class JavaFXController {
         }
     }
 
-    /**
-     * Helper method to convert percentage values in an expression to their decimal equivalents.
-     * Uses regex to find percentage values and converts them properly.
-     * 
-     * @param expression The expression string that may contain percentage values
-     * @return The expression with all percentage values converted to decimals
-     */
-    private String convertPercentagesInExpression(String expression) {
-        StringBuilder result = new StringBuilder();
-        
-        // Use regex pattern to find numbers followed by % sign
-        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(\\d+(?:\\.\\d+)?)%");
-        java.util.regex.Matcher matcher = pattern.matcher(expression);
-        
-        int lastEnd = 0;
-        while (matcher.find()) {
-            // Append everything before the match
-            result.append(expression, lastEnd, matcher.start());
-            
-            // Extract the number without the % sign
-            String valueWithoutPercent = matcher.group(1);
-            try {
-                // Convert to decimal value
-                double value = Double.parseDouble(valueWithoutPercent);
-                double decimalValue = value / 100.0;
-                // Append the decimal value
-                result.append(decimalValue);
-            } catch (NumberFormatException e) {
-                // If parsing fails, keep the original text
-                result.append(matcher.group(0));
-            }
-            
-            lastEnd = matcher.end();
-        }
-        
-        // Append any remaining text after the last match
-        if (lastEnd < expression.length()) {
-            result.append(expression.substring(lastEnd));
-        }
-        
-        return result.toString();
-    }
-
     private void clear() {
         resetCalculator();
     }
@@ -418,6 +395,10 @@ public class JavaFXController {
         operationJustPerformed = false;
         pendingUnaryOperation = null;
         pendingOperationClosings = 0;
+
+        // Reset the display type to "Input" when starting a new input
+        displayType.setText("Input");
+        displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
     }
 
     private void clearEntry() {
@@ -483,7 +464,7 @@ public class JavaFXController {
                     jsOperationSuffix = ", 2)";
                 }
                 case "sqrt" -> {
-                    operationPrefix = "sqrt(";
+                    operationPrefix = "\u221A(";
                     operationSuffix = ")";
                     jsOperationPrefix = "Math.sqrt(";
                     jsOperationSuffix = ")";
@@ -525,6 +506,10 @@ public class JavaFXController {
                 startNewInput = true;
                 operationJustPerformed = false; // Allow next digit input to replace display
                 
+                // Reset the display type to "Input" when starting a new input
+                displayType.setText("Input");
+                displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
+                
                 // Store operation info for later completion
                 pendingUnaryOperation = type;
                 pendingOperationClosings++;
@@ -545,6 +530,10 @@ public class JavaFXController {
                 // Set flags to prepare for the next input
                 startNewInput = true;
                 operationJustPerformed = false; // Allow next digit input to replace display
+                
+                // Reset the display type to "Input" when starting a new input
+                displayType.setText("Input");
+                displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
                 
                 // Store operation info for later completion
                 pendingUnaryOperation = type;
@@ -570,6 +559,10 @@ public class JavaFXController {
             // Format and display the result
             String formatted = formatNumber(result);
             mainDisplay.setText(formatted);
+            
+            // Update the display type to "Result" to indicate the main display shows a result
+            displayType.setText("Result");
+            displayType.setStyle("-fx-text-fill: rgba(0, 255, 0, 0.6);");
             
             // Create the display representation
             String operationDisplay = operationPrefix + valueStr + operationSuffix;
@@ -674,6 +667,10 @@ public class JavaFXController {
             // Mark that we should continue with this input
             startNewInput = false;
             operationJustPerformed = false;
+
+            // Reset the display type to "Input" when starting a new input
+            displayType.setText("Input");
+            displayType.setStyle("-fx-text-fill: rgba(229, 245, 0, 0.6);");
         }
     }
 

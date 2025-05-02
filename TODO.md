@@ -12,19 +12,30 @@
 
 - [ ] Add dark mode toggle
 - [ ] Change minimum height so that all buttons are always shown
+- [ ] Make sure that expressions fit within history and expressionDisplay
+- [ ] Scale button text with calculator size
+- [ ] Scale side panel with calculator size
 
 ## Extra Features
 
+- [ ] Change text label above mainDisplay to show input versus result
 - [ ] Implement Scientific Calculator
 - [ ] Create menu for switching to Scientific Calculator or other calculator types
 - [ ] Improve number formatting (e.g., thousands separator, trailing zeros, scientific notation)
 - [ ] Add keyboard input support
 
+## Documentation
+
+- [ ] JavaDoc everything
+- [ ] Finish README.md for GitHub
+
+## Fix Errors
+
+- [ ] Negative button breaks if used on any other value except the first value
+- [ ] Handle mathematical edge cases, such as dividing by 0
+
 ## Other
 
 - [ ] Allow nesting of unary operators
-- [ ] Handle mathematical edge cases, such as dividing by 0
 - [ ] Refactor methods to be more understandable
-- [ ] JavaDoc everything
-- [ ] Finish README.md for GitHub
 - [ ] Compile .jar and .exe files
