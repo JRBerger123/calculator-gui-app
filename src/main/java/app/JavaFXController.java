@@ -1,11 +1,12 @@
 package app;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
-
+import javafx.scene.Parent;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-
+import javafx.fxml.FXMLLoader;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +21,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.Scene;
+
 
 public class JavaFXController {
 
@@ -36,7 +39,9 @@ public class JavaFXController {
     @FXML private Button historyButton;
     @FXML private Button memoryButton;
     @FXML private ListView<String> historyMemoryListView;
+    @FXML private Button mPlusButton;
 
+    private boolean darkMode = true;
     private final ObservableList<String> historyList = FXCollections.observableArrayList();
     private final ObservableList<String> memoryList = FXCollections.observableArrayList();
 
@@ -109,6 +114,44 @@ public class JavaFXController {
      * Initializes the JavaFX controller.
      * Sets up the JavaScript engine, initializes the calculator state, configures the UI, and sets up Key Event Handler.
      */
+    @FXML
+    private void handleMemoryAdd(ActionEvent event){
+        memoryAdd();
+    }
+
+    @FXML
+    private void handleMemoryMinus(ActionEvent event){
+        memorySubtract();
+    }
+
+
+    @FXML
+    private void handleOpenBracket(ActionEvent event) {
+        appendToInput("(");
+    }
+
+    @FXML
+    private void handleCloseBracket(ActionEvent event) {
+        appendToInput(")");
+    }
+
+    @FXML
+    private void handleAbsoluteValue(ActionEvent event) {
+        // Append "abs(" so your normalizing logic can turn it into Math.abs(...)
+        appendToInput("abs(");
+    }
+
+
+    @FXML
+    private void handleEuler(ActionEvent event) {
+        appendToInput("e");
+    }
+
+    @FXML
+    private void handlePi(ActionEvent event) {
+        appendToInput("π");
+    }
+
     @FXML
     public void initialize() {
         try {
@@ -294,6 +337,7 @@ public class JavaFXController {
 
             case "percentButton" -> togglePercentDisplay();
             case "squareButton" -> applyUnaryOperation("square");
+            case "cubesButton" -> applyUnaryOperation("cubes");
             case "squareRootButton" -> applyUnaryOperation("sqrt");
             case "reciprocalButton" -> applyUnaryOperation("reciprocal");
             case "negateButton" -> applyUnaryOperation("negate");
@@ -781,6 +825,12 @@ public class JavaFXController {
                     jsOperationPrefix = "Math.sqrt(";
                     jsOperationSuffix = ")";
                 }
+                case "cubes" -> {
+                    operationPrefix = "\u221A(";
+                    operationSuffix = ")";
+                    jsOperationPrefix = "Math.cubes(";
+                    jsOperationSuffix = ")";
+                }
                 case "reciprocal" -> {
                     operationPrefix = "1/(";
                     operationSuffix = ")";
@@ -1120,16 +1170,58 @@ public class JavaFXController {
         contextMenu.setVisible(contextMenuVisible);
     }
 
-    @FXML
-    private void handleScientificClick() {
-        System.out.println("Switching to Scientific Mode...");
-        handleMenuToggle();
+    @FXML private void loadStandard()    { swapLayout("/app/CalculatorLayout.fxml"); }
+    @FXML private void loadScientific() { swapLayout("/app/ScientificCalculatorLayout.fxml"); }
+    private void swapLayout(String fxmlName) {
+     /*   try {
+            Parent newRoot = FXMLLoader.load(
+                    getClass().getResource(fxmlName)
+            );
+            Scene scene = root.getScene();
+            scene.setRoot(newRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+      */
+        System.out.println("Layout swapping not supported yet");
     }
 
     @FXML
     private void handleThemeToggle() {
-        System.out.println("Toggling Theme...");
-        contextMenu.setVisible(false);
-        handleMenuToggle();
+        Scene scene = root.getScene();
+        ObservableList<String> sheets = scene.getStylesheets();
+        sheets.clear();
+        if (darkMode) {
+            sheets.add(getClass().getResource("/styles/style-light.css")
+                    .toExternalForm());
+        } else {
+            sheets.add(getClass().getResource("/styles/style.css")
+                    .toExternalForm());
+        }
+        darkMode = !darkMode;
     }
+    @FXML
+    private void memoryAdd() {
+        double displayed = parseDisplayValue(mainDisplay.getText());
+        double mem = memoryList.isEmpty()
+                ? 0
+                : parseDisplayValue(memoryList.get(0));
+        double updated = mem + displayed;
+        String fmt = formatNumber(updated);
+        if (memoryList.isEmpty()) memoryList.add(0, fmt);
+        else                     memoryList.set(0, fmt);
+    }
+
+    @FXML
+    private void memorySubtract() {
+        double displayed = parseDisplayValue(mainDisplay.getText());
+        double mem = memoryList.isEmpty()
+                ? 0
+                : parseDisplayValue(memoryList.get(0));
+        double updated = mem - displayed;
+        String fmt = formatNumber(updated);
+        if (memoryList.isEmpty()) memoryList.add(0, fmt);
+        else                     memoryList.set(0, fmt);
+    }
+
 }

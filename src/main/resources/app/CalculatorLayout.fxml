@@ -37,7 +37,7 @@
         <!-- Calculator Display -->
         <VBox styleClass="display-container">
             <Label fx:id="expressionDisplay" styleClass="expression-display" maxWidth="Infinity" />
-            <VBox StyleClass="main-display" maxWidth="Infinity" VBox.vgrow="ALWAYS">
+            <VBox styleClass="main-display" maxWidth="Infinity" VBox.vgrow="ALWAYS">
                 <Label fx:id="displayType" text="Input" styleClass="display-type" maxWidth="Infinity" />
                 <Label fx:id="mainDisplay" text="0" styleClass="calculator-display" maxWidth="Infinity" />
             </VBox>
@@ -50,15 +50,15 @@
             <HBox spacing="5" VBox.vgrow="ALWAYS">
                 <Button fx:id="mcButton" onAction="#handleLeftClick" text="MC" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <Button fx:id="mrButton" onAction="#handleLeftClick" text="MR" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-                <Button fx:id="mPlusButton" onAction="#handleLeftClick" text="M+" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-                <Button fx:id="mMinusButton" onAction="#handleLeftClick" text="M-" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="mPlusButton" onAction="#handleMemoryAdd" text="M+" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="mMinusButton" onAction="#handleMemoryMinus" text="M-" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <Button fx:id="msButton" onAction="#handleLeftClick" text="MS" styleClass="calculator-function, memory-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             </HBox>
 
             <!-- Row: Clear Functions -->
             <HBox spacing="5" VBox.vgrow="ALWAYS">
                 <!-- The percentButton text is intentionally left blank because % character cannot be used in FXML -->
-                <Button fx:id="percentButton" onAction="#handleLeftClick" text="" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button fx:id="percentButton" onAction="#handleLeftClick" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <Button fx:id="ceButton" onAction="#handleLeftClick" text="CE" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <Button fx:id="cButton" onAction="#handleLeftClick" text="C" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                 <Button fx:id="backspaceButton" onAction="#handleLeftClick" text="⌫" styleClass="calculator-function, secondary-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
@@ -135,7 +135,7 @@
 
         <Label text="Scientific Calculator"
                textFill="white"
-               onMouseClicked="#handleScientificClick"
+               onMouseClicked="#loadScientific"
                style="-fx-cursor: hand;" />
 
         <Label text="Toggle Dark/Light Mode"

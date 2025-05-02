@@ -1,0 +1,155 @@
+/* style-light.css */
+/* Light mode overrides based on your existing dark theme in style.css */
+.calculator-root {
+  -fx-background-color: rgb(245, 245, 245);
+}
+
+.calculator-root .settings-container {
+  -fx-background-color: rgb(245, 245, 245);
+  -fx-padding: 10px;
+  -fx-spacing: 10px;
+}
+
+.calculator-root .settings-container .menu-button {
+  -fx-background-color: rgb(245, 245, 245);
+  -fx-text-fill: rgb(0, 0, 0);
+  -fx-font-size: 14px;
+  -fx-padding: 8px;
+  -fx-background-radius: 5px;
+}
+
+.calculator-root .settings-container .calculator-type {
+  -fx-text-fill: rgb(0, 0, 0);
+  -fx-font-size: 18px;
+  -fx-padding: 5px 8px;
+  -fx-font-weight: bold;
+}
+
+.calculator-root .display-container {
+  -fx-padding: 10px;
+  -fx-spacing: 5px;
+}
+
+.calculator-root .display-container .expression-display {
+  -fx-font-size: 18px;
+  -fx-background-color: rgba(255, 255, 255, 0.5);
+  -fx-text-fill: rgb(0, 0, 0);
+  -fx-alignment: center-right;
+  -fx-padding: 5px 10px;
+}
+
+.calculator-root .display-container .main-display .display-type {
+  -fx-font-size: 12px;
+  -fx-text-fill: rgba(0, 122, 204, 0.6);
+  -fx-font-weight: bold;
+  -fx-alignment: center-right;
+}
+
+.calculator-root .display-container .main-display .calculator-display {
+  -fx-font-size: 32px;
+  -fx-background-color: rgba(255, 255, 255, 0.5);
+  -fx-text-fill: rgb(0, 0, 0);
+  -fx-alignment: center-right;
+  -fx-pref-height: 60px;
+  -fx-padding: 6px 10px 10px 10px;
+}
+
+.calculator-root .button-container {
+  -fx-padding: 10px;
+  -fx-spacing: 5px;
+  -fx-alignment: center;
+}
+
+.calculator-root .calculator-button, .calculator-root .calculator-function {
+  -fx-font-size: 18px;
+  -fx-pref-width: 50px;
+  -fx-pref-height: 50px;
+  -fx-max-width: Infinity;
+  -fx-max-height: Infinity;
+  -fx-background-radius: 5px;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 2, 0, 0, 1);
+}
+
+.calculator-root .primary-button {
+  -fx-background-color: rgb(235, 235, 235);
+  -fx-text-fill: rgb(0, 0, 0);
+  -fx-font-size: 18px;
+}
+
+.calculator-root .primary-button:hover {
+  -fx-background-color: rgb(225, 225, 225);
+}
+
+.calculator-root .primary-button:pressed {
+  -fx-background-color: rgb(210, 210, 210);
+}
+
+.calculator-root .secondary-button {
+  -fx-background-color: rgb(225, 225, 225);
+  -fx-text-fill: rgb(0, 0, 0);
+  -fx-font-size: 18px;
+}
+
+.calculator-root .secondary-button:hover {
+  -fx-background-color: rgb(235, 235, 235);
+}
+
+.calculator-root .secondary-button:pressed {
+  -fx-background-color: rgb(210, 210, 210);
+}
+
+.calculator-root .memory-button {
+  -fx-background-color: rgba(255, 255, 255, 0);
+  -fx-text-fill: rgb(0, 0, 0);
+  -fx-font-size: 16px;
+}
+
+.calculator-root .memory-button:hover {
+  -fx-background-color: rgb(225, 225, 225);
+}
+
+.calculator-root .memory-button:pressed {
+  -fx-background-color: rgb(210, 210, 210);
+}
+
+.calculator-root .equals {
+  /* Retain accent from dark theme */
+  -fx-background-color: rgb(225, 131, 217);
+  -fx-text-fill: rgb(0, 0, 0);
+}
+
+.calculator-root .equals:hover {
+  -fx-background-color: rgb(154, 90, 149);
+}
+
+.calculator-root .equals:pressed {
+  -fx-background-color: rgb(177, 54, 164);
+}
+
+.side-panel {
+  -fx-background-color: rgba(255, 255, 255, 0.5);
+  -fx-padding: 10px;
+  -fx-spacing: 10px;
+}
+
+.side-panel .tab-buttons {
+  -fx-padding: 5px;
+  -fx-spacing: 5px;
+}
+
+.side-panel .tab-buttons .tab-button {
+  -fx-background-color: rgba(255, 255, 255, 0.5);
+  -fx-text-fill: rgb(0, 0, 0);
+  -fx-font-size: 16px;
+  -fx-padding: 8px;
+  -fx-background-radius: 5px;
+}
+
+.side-panel .historyMemory-panel {
+  -fx-background-color: rgba(255, 255, 255, 0.5);
+  -fx-spacing: 5px;
+}
+
+
+
+/*# sourceMappingURL=style-light.css.map */

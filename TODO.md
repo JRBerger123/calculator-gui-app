@@ -2,7 +2,7 @@
 
 ## History and Memory
 
-- [ ] Finish memory button logic (M+, M-)
+- [x] Finish memory button logic (M+, M-)
 - [ ] Add a button for showing memory and history in condensed view. These buttons should dissapear when in expanded mode
 - [ ] Add dedicated clear all memory and history button to its dedicated panel (The MC button technically does part of this, but isn't obvious)
 - [x] Only add to history when equals is pressed
@@ -10,7 +10,7 @@
 
 ## Visual Changes
 
-- [ ] Add dark/light mode toggle
+- [x] Add dark/light mode toggle
 - [ ] Change minimum height so that all buttons are always shown
 - [ ] Make sure that expressions fit within history and expressionDisplay
 - [ ] Scale all text with calculator size
