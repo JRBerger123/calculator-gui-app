@@ -4,8 +4,9 @@
 
 - [x] Finish memory button logic (M+, M-)
 - [ ] Add a button for showing memory and history in condensed view. These buttons should dissapear when in expanded mode
-- [ ] Add dedicated clear all memory and history button to its dedicated panel (The MC button technically does part of this, but isn't obvious)
+- [x] Add dedicated clear all memory and history button to its dedicated panel (The MC button technically does part of this, but isn't obvious)
 - [x] Only add to history when equals is pressed
+- [ ] Add ability to use past history and memory (can only use last memory option right now)
 - [ ] Create custom button list for history and memory list
 
 ## Visual Changes
@@ -35,7 +36,7 @@
 ## Documentation
 
 - [ ] JavaDoc everything
-- [ ] Finish README.md for GitHub
+- [x] Finish README.md for GitHub
 
 ## Fix Errors
 

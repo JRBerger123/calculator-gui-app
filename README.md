@@ -7,7 +7,8 @@
 ## Preview of App
 
 ![Screenshot 1 of the application's output](assets/Preview_1.png)
-![Screenshot 1 of the application's output](assets/Preview_2.png)
+![Screenshot 2 of the application's output](assets/Preview_2.png)
+![Screenshot 3 of the application's output](assets/Preview_3.gif)
 
 ---
 
@@ -89,18 +90,21 @@ The calculator is still under development. While many standard and scientific fu
 > This section includes the current TODO list, formatted from `TODO.md`:
 
 ```markdown
-### History and Memory
+Calculator TODO List
 
-- [ ] Finish memory button logic (M+, M-)
+History and Memory
+
+- [x] Finish memory button logic (M+, M-)
 - [ ] Add a button for showing memory and history in condensed view. These buttons should dissapear when in expanded mode
-- [ ] Add dedicated clear all memory and history button to its dedicated panel (The MC button technically does part of this, but isn't obvious)
+- [x] Add dedicated clear all memory and history button to its dedicated panel (The MC button technically does part of this, but isn't obvious)
 - [x] Only add to history when equals is pressed
+- [ ] Add ability to use past history and memory (can only use last memory option right now)
 - [ ] Create custom button list for history and memory list
 
-### Visual Changes
+Visual Changes
 
-- [ ] Add dark/light mode toggle
-- [ ] Change minimum height so that all buttons are always shown
+- [x] Add dark/light mode toggle
+- [x] Change minimum height so that all buttons are always shown
 - [ ] Make sure that expressions fit within history and expressionDisplay
 - [ ] Scale all text with calculator size
 - [ ] Scale side panel with calculator size
@@ -109,38 +113,39 @@ The calculator is still under development. While many standard and scientific fu
 - [ ] Create style class(es) for disabled buttons that is applied when buttons cannot be used (e.g., some of the memory buttons when no memory is stored, when error occurs)
 - [ ] Show user feedback that text was copy or pasted
 
-### Extra Features
+Extra Features
 
 - [x] Change text label above mainDisplay to show input versus result
-- [ ] Create menu for switching to Scientific Calculator or other calculator types
+- [x] Create menu for switching to Scientific Calculator or other calculator types
 - [ ] Implement new buttons that were added on the Scientific Calculator
 - [ ] Improve number formatting (e.g., thousands separator, trailing zeros, scientific notation)
 - [ ] Implement the ability to highlight a portion of the answer for copying or just because
 - [x] Implement copy answer feature
 - [x] Implement paste input feature
 - [x] Add keyboard input support
+- [ ] If using the same operator repeatedly, should operate on the result with the last operator and input
 
-### Documentation
+Documentation
 
 - [ ] JavaDoc everything
-- [ ] Finish README.md for GitHub
+- [x] Finish README.md for GitHub
 
-### Fix Errors
+Fix Errors
 
-- [ ] Negative button breaks if used on any other value except the first value
+- [x] Negative button breaks if used on any other value except the first value
 - [ ] Handle mathematical edge cases, such as dividing by 0
 - [ ] Implement error handling involving displaying the error type on the mainDisplay
-- [ ] Equals does not update expressionDisplay if the previous expressionDisplay includes only a value and equals sign (e.g., 2 =, 4 =)
-- [ ] ExpressionDisplay does not clear when a new input starts after equals has been pressed
-- [ ] M+ and M- buttons are not implemented
+- [x] Equals does not update expressionDisplay if the previous expressionDisplay includes only a value and equals sign (e.g., 2 =, 4 =)
+- [x] ExpressionDisplay does not clear when a new input starts after equals has been pressed
 - [x] Change percentage logic to append percent without multiplication if input, and append percent with multiplication if result
 
-### Other
+Other
 
 - [ ] Allow nesting of unary operators
 - [ ] Refactor methods to be more understandable (e.g., create better names for methods)
 - [ ] Create UML Diagram or equivalent showing highlevel of how methods and files connect with each other
 - [ ] Compile .jar and .exe files
+
 ```
 
 [Back to top](#calculator-gui-app)
